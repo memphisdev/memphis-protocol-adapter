@@ -96,7 +96,7 @@ Blocks:
 ### `/pkg`
 
 Packages of the project
-* rest - code for the rest gateway (based on [sputnik](https://github.com/g41797/sputnik))
-* syslog - code for the syslog adapter(based on [sputnik](https://github.com/g41797/sputnik))
+* rest - code for the rest gateway (based on [Memphis Go SDK](https://github.com/g41797/memphis.go) and [sputnik](https://github.com/g41797/sputnik))
+* syslog - code for the syslog adapter(based on [Memphis Go SDK](https://github.com/g41797/memphis.go) and [sputnik](https://github.com/g41797/sputnik))
 * server - code for working with memphis server(based on [Memphis Go SDK](https://github.com/g41797/memphis.go))
 
