@@ -13,7 +13,8 @@ memphis-protocol-adapter
 │   │   └── main.go
 │   └── syslog-adapter
 │       ├── blocks.yaml
-│       └── main.go
+│       ├── main.go
+│       └── syslog-adapter
 ├── _config
 │   ├── protocol-adapter
 │   │   └── connector.json
@@ -22,11 +23,16 @@ memphis-protocol-adapter
 │   └── syslog-adapter
 │       └── connector.json
 ├── go.mod
+├── go.sum
 ├── LICENSE
 ├── Makefile
 ├── pkg
 │   ├── adapter
 │   │   ├── config.go
+│   │   ├── config_test.go
+│   │   ├── _conf_test
+│   │   │   ├── example.json
+│   │   │   └── example.yaml
 │   │   ├── connector.go
 │   │   └── logger.go
 │   ├── rest
