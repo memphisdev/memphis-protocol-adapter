@@ -7,27 +7,31 @@ memphis-protocol-adapter
 ├── cmd
 │   ├── protocol-adapter
 │   │   ├── blocks.yaml
-│   │   ├── config.json
 │   │   └── main.go
 │   ├── rest-gateway
 │   │   ├── blocks.yaml
-│   │   ├── config.json
 │   │   └── main.go
 │   └── syslog-adapter
 │       ├── blocks.yaml
-│       ├── config.json
 │       └── main.go
+├── _config
+│   ├── protocol-adapter
+│   │   └── connector.json
+│   ├── rest-gateway
+│   │   └── connector.json
+│   └── syslog-adapter
+│       └── connector.json
 ├── go.mod
 ├── LICENSE
 ├── Makefile
 ├── pkg
-│   ├── rest
-│   │   ├── producer.go
-│   │   └── receiver.go
-│   ├── server
+│   ├── adapter
 │   │   ├── config.go
 │   │   ├── connector.go
 │   │   └── logger.go
+│   ├── rest
+│   │   ├── producer.go
+│   │   └── receiver.go
 │   └── syslog
 │       ├── producer.go
 │       └── receiver.go
@@ -98,5 +102,5 @@ Blocks:
 Packages of the project
 * rest - code for the rest gateway (based on [Memphis Go SDK](https://github.com/memphisdev/memphis.go) and [sputnik](https://github.com/g41797/sputnik))
 * syslog - code for the syslog adapter(based on [Memphis Go SDK](https://github.com/memphisdev/memphis.go) and [sputnik](https://github.com/g41797/sputnik))
-* server - code for working with memphis server(based on [Memphis Go SDK](https://github.com/memphisdev/memphis.go))
+* adapter - runtime 
 
