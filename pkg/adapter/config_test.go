@@ -1,6 +1,8 @@
 package adapter_test
 
 import (
+	"os"
+	"strconv"
 	"testing"
 
 	adapter "github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
@@ -11,27 +13,66 @@ type TestConf struct {
 	SECONDINT   int    `mapstructure:"SECONDINT"`
 }
 
-func TestPrepare(t *testing.T) {
+func TestJSON(t *testing.T) {
 
 	confFolderPath := "./_conf_test/"
 
 	cfact := adapter.ConfigFactory(confFolderPath)
 
-	expected := TestConf{"1.0.3", 300}
+	expected := defaults()
 
 	var tf TestConf
 
 	err := cfact("example", &tf)
 
-	if err != nil {
-		t.Errorf("unmarshal error %v", err)
+	compare(t, err, tf, expected)
+}
+
+func TestENV(t *testing.T) {
+
+	confFolderPath := "./_conf_test/"
+
+	cfact := adapter.ConfigFactory(confFolderPath)
+
+	expected := defaults()
+	expected.SECONDINT = 12345
+
+	os.Setenv("EXAMPLE_FIRSTSTRING", expected.FIRSTSTRING)
+
+	os.Setenv("EXAMPLE_SECONDINT", strconv.Itoa((expected.SECONDINT)))
+
+	secIntString, ok := os.LookupEnv("EXAMPLE_SECONDINT")
+
+	if !ok {
+		t.Errorf("Wrong working with environment")
 	}
 
-	if tf.FIRSTSTRING != expected.FIRSTSTRING {
-		t.Errorf("Expected %s Actual %s", expected.FIRSTSTRING, tf.FIRSTSTRING)
+	if secIntString != "12345" {
+		t.Errorf("Wrong test")
 	}
 
-	if tf.SECONDINT != expected.SECONDINT {
-		t.Errorf("Expected %d Actual %d", expected.SECONDINT, tf.SECONDINT)
+	var tf TestConf
+
+	err := cfact("example", &tf)
+
+	compare(t, err, tf, expected)
+}
+
+func defaults() TestConf {
+	return TestConf{"1.0.3", 300}
+}
+
+func compare(t *testing.T, getErr error, actual TestConf, expected TestConf) {
+
+	if getErr != nil {
+		t.Errorf("unmarshal error %v", getErr)
+	}
+
+	if actual.FIRSTSTRING != expected.FIRSTSTRING {
+		t.Errorf("Expected %s Actual %s", expected.FIRSTSTRING, actual.FIRSTSTRING)
+	}
+
+	if actual.SECONDINT != expected.SECONDINT {
+		t.Errorf("Expected %d Actual %d", expected.SECONDINT, actual.SECONDINT)
 	}
 }
