@@ -8,6 +8,22 @@ https://jekhokie.github.io/syslog/syslog-ng/kafka/logging/linux/2016/12/21/integ
 Send Syslog to Kafka
 https://support.vectra.ai/s/article/KB-VS-1155
 
+    Upload your CA Certificate, Client Certificate and Client key (all required)
+
+    CA certificate
+        Must be in unencrypted PEM, x.509 format
+
+    Client Certificate
+        Must be in unencrypted PEM, x.509 format
+        Must be signed by CA certificate
+
+    Client Key
+        Must be in unencrypted PEM, x.509 format
+        Must match Client Certificate
+
+
+
+
 Syslog Source Connector for Confluent Platform
 https://docs.confluent.io/kafka-connectors/syslog/current/overview.html#
 
@@ -27,6 +43,54 @@ Supported formats are rfc 3164, rfc 5424, and Common Event Format (CEF).
 Configuration
 https://docs.confluent.io/kafka-connectors/syslog/current/syslog_source_connector_config.html
 
+    topic
+        Name of the topic to put all records.
+        Type: string
+        Default: syslog
+        Importance: high
+
+    SSL
+        syslog.ssl.cert.chain.path
+            Path to X.509 cert chain file in PEM format.
+
+            Type: string
+            Default: “”
+            Importance: high
+
+        syslog.ssl.key.password
+            The password of the key file(syslog.ssl.key.path), or blank if it’s not password-protected
+
+            Type: password
+            Default: [hidden]
+            Importance: high
+
+        syslog.ssl.key.path
+            Path to a PKCS#8 private key file in PEM format.
+
+            Type: string
+            Default: “”
+            Importance: high
+
+        syslog.ssl.self.signed.certificate.enable
+            Flag to determine if a self signed certificate should be generated and used.
+
+            Type: boolean
+            Default: false
+            Importance: high
+
+        syslog.ssl.client.auth.enable
+            Enable Client Authentication in SSL communication between the connector and syslog client. 
+            * Type: boolean 
+            * Default: false 
+            * Importance: low
+
+        syslog.ssl.root.ca.cert.chain.path
+            Path to X.509 root CA certificate chain file in PEM format to verify client certificate when client authentication is enabled in SSL Communication.
+
+            Type: string
+            Default: “”
+            Importance: low
+
 
 [Cloudera] Syslog TCP Source connector
 https://docs.cloudera.com/cdp-private-cloud-base/7.1.8/kafka-connect/topics/kafka-connect-connector-syslog-tcp-source.html?
@@ -44,6 +108,26 @@ https://github.com/mcuadros/go-syslog
 - without go.mod
 - Imported by: 121
 - tls tests failed with panic => temporary tls tests disabled
+
+- COMMON 
+		"priority":  p.priority.P,
+		"facility":  p.priority.F.Value,
+		"severity":  p.priority.S.Value,
+		"timestamp": p.header.timestamp,
+		"hostname":  p.header.hostname,
+
+- RFC3164:
+		"tag":       p.message.tag,
+		"content":   p.message.content,
+
+- RFC5424:
+		"version":         p.header.version,
+		"app_name":        p.header.appName,
+		"proc_id":         p.header.procId,
+		"msg_id":          p.header.msgId,
+		"structured_data": p.structuredData,
+		"message":         p.message,
+
 - go-syslog/internal/syslogparser/ very old (4 years) fork of 
 
     - https://github.com/jeromer/syslogparser

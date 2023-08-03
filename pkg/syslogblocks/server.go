@@ -1,17 +1,24 @@
 package syslogblocks
 
 import (
-	syslogd "gopkg.in/mcuadros/go-syslog.v2"
+	syslog "gopkg.in/mcuadros/go-syslog.v2"
+	format "gopkg.in/mcuadros/go-syslog.v2/format"
 )
 
 type SyslogConfiguration struct {
-	// TCP listener port. For 0 - don't use TCP
-	PORTTCP int
+	// IPv4 address of TCP listener.
+	// For empty string - don't use TCP
+	// Usually "0.0.0.0:514" - listen on all adapters, port 514
+	// "127.0.0.1:514" - listen on loopback "adapter"
+	ADDRTCP string
 
 	// Add after solving tls cert. probleb PORTTCPTLS int
 
-	// UDP receiver port, For 0 - don't use UDP
-	PORTUDP int
+	// IPv4 address of UDP receiver.
+	// For empty string - don't use UDP
+	// Usually "0.0.0.0:514" - receive from all adapters, port 514
+	// "127.0.0.1:514" - receive from loopback "adapter"
+	ADDRUDP string
 
 	// Unix domain socket name - actually file path.
 	// For empty string - don't use UDS
@@ -29,12 +36,44 @@ type SyslogConfiguration struct {
 	SEVERITYLEVEL int
 }
 
-type server struct {
+type Server struct {
 	config  SyslogConfiguration
-	syslogd *syslogd.Server
+	syslogd *syslog.Server
 }
 
-func (s *server) init(conf SyslogConfiguration) {
+func (s *Server) Init(conf SyslogConfiguration) error {
 	s.config = conf
-	s.syslogd = syslogd.NewServer()
+	s.syslogd = syslog.NewServer()
+	s.syslogd.SetFormat(syslog.Automatic)
+	if len(s.config.ADDRTCP) != 0 {
+		err := s.syslogd.ListenTCP(s.config.ADDRTCP)
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(s.config.ADDRUDP) != 0 {
+		err := s.syslogd.ListenUDP(s.config.ADDRUDP)
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(s.config.UDSPATH) != 0 {
+		err := s.syslogd.ListenUnixgram(s.config.UDSPATH)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (s *Server) Finish() error {
+	err := s.syslogd.Kill()
+	return err
+}
+
+func Handle(logParts format.LogParts, msgLen int64, err error) {
+
 }
