@@ -1,0 +1,81 @@
+
+Forward Rsyslog messages to Apache Kafka
+https://github.com/uswitch/syslogger
+
+Integrate syslog-ng with Kafka
+https://jekhokie.github.io/syslog/syslog-ng/kafka/logging/linux/2016/12/21/integrate-syslog-ng-with-kafka.html
+
+Send Syslog to Kafka
+https://support.vectra.ai/s/article/KB-VS-1155
+
+Syslog Source Connector for Confluent Platform
+https://docs.confluent.io/kafka-connectors/syslog/current/overview.html#
+
+You can use the Kafka Connect Syslog Source connector to consume data from network devices. 
+Supported formats are rfc 3164, rfc 5424, and Common Event Format (CEF).
+
+    Features
+        The Syslog Source connector includes the following features:
+
+        At least once delivery
+            This connector guarantees that records are delivered at least once to the Kafka topic. 
+            If the connector restarts, there may be some duplicate records in the Kafka topic.
+
+        Supports one task
+            The Syslog Source connector supports running one task.
+
+Configuration
+https://docs.confluent.io/kafka-connectors/syslog/current/syslog_source_connector_config.html
+
+
+[Cloudera] Syslog TCP Source connector
+https://docs.cloudera.com/cdp-private-cloud-base/7.1.8/kafka-connect/topics/kafka-connect-connector-syslog-tcp-source.html?
+
+
+
+go syslogd
+https://github.com/mcuadros/go-syslog
+
+- MIT license
+- v2.3.0 Aug 15, 2019
+- last change Mar 30, 2020
+- 22 issues [Mar 22, 2016:Dec 15, 2021]
+- 9 pull requests [Sep 5, 2018:Jun 30, 2023]
+- without go.mod
+- Imported by: 121
+- tls tests failed with panic => temporary tls tests disabled
+- go-syslog/internal/syslogparser/ very old (4 years) fork of 
+
+    - https://github.com/jeromer/syslogparser
+      
+      - last change Aug 13, 2021 v1.1.0 
+      - BSD-3-Clause license
+      - go 1.14
+      - Imported by: 61
+
+
+Ekanite
+https://github.com/ekanite/ekanite
+
+
+THE SYSLOG HELL
+https://techblog.bozho.net/the-syslog-hell/#:~:text=RFC5424%20defines%20a%20key-value,define%20their%20own%20message%20formats.
+
+
+Syslog Standards: A simple Comparison between RFC3164 & RFC5424
+https://www.diaryfolio.com/2020/07/syslog-standards-simple-comparison.html
+
+syslog parser
+https://github.com/influxdata/go-syslog/
+
+
+Syslog message format
+https://github.com/luigiberrettini/NLog.Targets.Syslog-Personal/blob/master/docs/syslog-message-format.md
+
+
+Filter messages based on priority
+https://documentation.solarwinds.com/en/success_center/kss/content/kss_adminguide_filter_messages_based_on_priority.htm
+
+
+unix - sockets for local interprocess communication
+https://man7.org/linux/man-pages/man7/unix.7.html

@@ -11,8 +11,10 @@ require (
 	github.com/g41797/kissngoqueue v0.1.5 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 replace github.com/tkanos/gonfig => /home/g41797/go/pkg/mod/github.com/tkanos/gonfig/
+
+replace gopkg.in/mcuadros/go-syslog.v2 => /home/g41797/go/pkg/mod/github.com/g41797/go-syslog
