@@ -163,3 +163,8 @@ https://documentation.solarwinds.com/en/success_center/kss/content/kss_adminguid
 
 unix - sockets for local interprocess communication
 https://man7.org/linux/man-pages/man7/unix.7.html
+
+
+syslog go client
+https://sirsean.medium.com/srslog-sending-syslog-messages-from-go-a270d9c74ecd
+https://github.com/RackSec/srslog

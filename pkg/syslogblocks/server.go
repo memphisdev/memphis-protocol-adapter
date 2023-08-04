@@ -1,6 +1,8 @@
 package syslogblocks
 
 import (
+	"strconv"
+
 	"github.com/g41797/sputnik"
 	"gopkg.in/mcuadros/go-syslog.v2"
 	"gopkg.in/mcuadros/go-syslog.v2/format"
@@ -88,9 +90,37 @@ func (s *Server) Handle(logParts format.LogParts, msgLen int64, err error) {
 		return
 	}
 
+	if !s.ForHandle(logParts) {
+		return
+	}
+
 	msg := ToMsg(logParts, msgLen)
 
 	s.bc.Send(msg)
+}
+
+func (s *Server) ForHandle(logParts format.LogParts) bool {
+	if s.config.SEVERITYLEVEL == -1 {
+		return false
+	}
+
+	if logParts == nil {
+		return false
+	}
+
+	if len(logParts) == 0 {
+		return false
+	}
+
+	severity, exists := logParts[SeverityKey].(string)
+
+	if !exists {
+		return true
+	}
+
+	sevvalue, _ := strconv.Atoi(severity)
+
+	return sevvalue <= s.config.SEVERITYLEVEL
 }
 
 func ToMsg(logParts format.LogParts, msgLen int64) sputnik.Msg {
@@ -123,7 +153,7 @@ func RFC3164Keys() []string {
 	return []string{
 		"priority",
 		"facility",
-		"severity",
+		SeverityKey,
 		"timestamp",
 		"hostname",
 		"tag",
@@ -135,14 +165,14 @@ func RFC5424Keys() []string {
 	return []string{
 		"priority",
 		"facility",
-		"severity",
+		SeverityKey,
 		"timestamp",
 		"hostname",
 		"version",
 		"app_name",
 		"proc_id",
 		"msg_id",
-		"structured_data",
+		RFC5424OnlyKey,
 		"message",
 	}
 }
@@ -152,4 +182,5 @@ const (
 	RFCFormatKey   = "rfc"
 	RFC3164        = "RFC3164"
 	RFC5424        = "RFC5424"
+	SeverityKey    = "severity"
 )
