@@ -1,8 +1,9 @@
 package syslogblocks
 
 import (
-	syslog "gopkg.in/mcuadros/go-syslog.v2"
-	format "gopkg.in/mcuadros/go-syslog.v2/format"
+	"github.com/g41797/sputnik"
+	"gopkg.in/mcuadros/go-syslog.v2"
+	"gopkg.in/mcuadros/go-syslog.v2/format"
 )
 
 type SyslogConfiguration struct {
@@ -38,13 +39,21 @@ type SyslogConfiguration struct {
 
 type Server struct {
 	config  SyslogConfiguration
+	bc      sputnik.BlockCommunicator
 	syslogd *syslog.Server
 }
 
-func (s *Server) Init(conf SyslogConfiguration) error {
-	s.config = conf
+func NewServer(conf SyslogConfiguration, bc sputnik.BlockCommunicator) *Server {
+	srv := new(Server)
+	srv.config = conf
+	srv.bc = bc
+	return srv
+}
+
+func (s *Server) Init() error {
 	s.syslogd = syslog.NewServer()
 	s.syslogd.SetFormat(syslog.Automatic)
+	s.syslogd.SetHandler(s)
 	if len(s.config.ADDRTCP) != 0 {
 		err := s.syslogd.ListenTCP(s.config.ADDRTCP)
 		if err != nil {
@@ -74,6 +83,73 @@ func (s *Server) Finish() error {
 	return err
 }
 
-func Handle(logParts format.LogParts, msgLen int64, err error) {
+func (s *Server) Handle(logParts format.LogParts, msgLen int64, err error) {
+	if err != nil {
+		return
+	}
 
+	msg := ToMsg(logParts, msgLen)
+
+	s.bc.Send(msg)
 }
+
+func ToMsg(logParts format.LogParts, msgLen int64) sputnik.Msg {
+	if logParts == nil {
+		return nil
+	}
+
+	if len(logParts) == 0 {
+		return nil
+	}
+
+	msg := make(sputnik.Msg)
+
+	for k, v := range logParts {
+		msg[k] = v
+	}
+
+	_, exists := logParts[RFC5424OnlyKey]
+
+	if exists {
+		msg[RFCFormatKey] = RFC5424
+	} else {
+		msg[RFCFormatKey] = RFC3164
+	}
+
+	return msg
+}
+
+func RFC3164Keys() []string {
+	return []string{
+		"priority",
+		"facility",
+		"severity",
+		"timestamp",
+		"hostname",
+		"tag",
+		"content",
+	}
+}
+
+func RFC5424Keys() []string {
+	return []string{
+		"priority",
+		"facility",
+		"severity",
+		"timestamp",
+		"hostname",
+		"version",
+		"app_name",
+		"proc_id",
+		"msg_id",
+		"structured_data",
+		"message",
+	}
+}
+
+const (
+	RFC5424OnlyKey = "structured_data"
+	RFCFormatKey   = "rfc"
+	RFC3164        = "RFC3164"
+	RFC5424        = "RFC5424"
+)
