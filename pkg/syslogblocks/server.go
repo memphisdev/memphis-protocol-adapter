@@ -2,6 +2,7 @@ package syslogblocks
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/g41797/sputnik"
 	"gopkg.in/mcuadros/go-syslog.v2"
@@ -112,13 +113,13 @@ func (s *Server) ForHandle(logParts format.LogParts) bool {
 		return false
 	}
 
-	severity, exists := logParts[SeverityKey].(string)
+	severity, exists := logParts[SeverityKey]
 
 	if !exists {
 		return true
 	}
 
-	sevvalue, _ := strconv.Atoi(severity)
+	sevvalue, _ := severity.(int)
 
 	return sevvalue <= s.config.SEVERITYLEVEL
 }
@@ -132,48 +133,90 @@ func ToMsg(logParts format.LogParts, msgLen int64) sputnik.Msg {
 		return nil
 	}
 
-	msg := make(sputnik.Msg)
-
-	for k, v := range logParts {
-		msg[k] = v
-	}
-
 	_, exists := logParts[RFC5424OnlyKey]
 
 	if exists {
-		msg[RFCFormatKey] = RFC5424
+		return ToRFC5424(logParts)
 	} else {
-		msg[RFCFormatKey] = RFC3164
+		return ToRFC3164(logParts)
+	}
+}
+
+func ToRFC5424(logParts format.LogParts) sputnik.Msg {
+	msg := make(sputnik.Msg)
+	msg[RFCFormatKey] = RFC5424
+
+	props := RFC5424Props()
+
+	for k, v := range logParts {
+		msg[k] = ToString(v, props[k])
 	}
 
 	return msg
 }
 
-func RFC3164Keys() []string {
-	return []string{
-		"priority",
-		"facility",
-		SeverityKey,
-		"timestamp",
-		"hostname",
-		"tag",
-		"content",
+func ToRFC3164(logParts format.LogParts) sputnik.Msg {
+	msg := make(sputnik.Msg)
+	msg[RFCFormatKey] = RFC3164
+
+	props := RFC3164Props()
+
+	for k, v := range logParts {
+		msg[k] = ToString(v, props[k])
+	}
+
+	return msg
+}
+
+func ToString(val any, typ string) string {
+	result := ""
+
+	if val == nil {
+		return result
+	}
+
+	switch typ {
+	case "string":
+		result, _ = val.(string)
+		return result
+	case "int":
+		intval, _ := val.(int)
+		result = strconv.Itoa(intval)
+		return result
+	case "time.Time":
+		tval, _ := val.(time.Time)
+		result = tval.UTC().String()
+		return result
+	}
+
+	return result
+}
+
+func RFC3164Props() map[string]string {
+	return map[string]string{
+		"priority":  "int",
+		"facility":  "int",
+		SeverityKey: "int",
+		"timestamp": "time.Time",
+		"hostname":  "string",
+		"tag":       "string",
+		"content":   "string",
 	}
 }
 
-func RFC5424Keys() []string {
-	return []string{
-		"priority",
-		"facility",
-		SeverityKey,
-		"timestamp",
-		"hostname",
-		"version",
-		"app_name",
-		"proc_id",
-		"msg_id",
-		RFC5424OnlyKey,
-		"message",
+func RFC5424Props() map[string]string {
+	return map[string]string{
+		"priority":     "int",
+		"facility":     "int",
+		SeverityKey:    "int",
+		"timestamp":    "time.Time",
+		"hostname":     "string",
+		"version":      "int",
+		"app_name":     "string",
+		"proc_id":      "string",
+		"msg_id":       "string",
+		RFC5424OnlyKey: "string",
+		"message":      "string",
 	}
 }
 

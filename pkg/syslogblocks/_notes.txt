@@ -110,23 +110,23 @@ https://github.com/mcuadros/go-syslog
 - tls tests failed with panic => temporary tls tests disabled
 
 - COMMON 
-		"priority":  p.priority.P,
-		"facility":  p.priority.F.Value,
-		"severity":  p.priority.S.Value,
-		"timestamp": p.header.timestamp,
-		"hostname":  p.header.hostname,
+		"priority":  p.priority.P,              int
+		"facility":  p.priority.F.Value,        int
+		"severity":  p.priority.S.Value,        int
+		"timestamp": p.header.timestamp,        time.Time
+		"hostname":  p.header.hostname,         string
 
 - RFC3164:
-		"tag":       p.message.tag,
-		"content":   p.message.content,
+		"tag":       p.message.tag,             string
+		"content":   p.message.content,         string
 
 - RFC5424:
-		"version":         p.header.version,
-		"app_name":        p.header.appName,
-		"proc_id":         p.header.procId,
-		"msg_id":          p.header.msgId,
-		"structured_data": p.structuredData,
-		"message":         p.message,
+		"version":         p.header.version,    int
+		"app_name":        p.header.appName,    string
+		"proc_id":         p.header.procId,     string
+		"msg_id":          p.header.msgId,      string
+		"structured_data": p.structuredData,    string
+		"message":         p.message,           string
 
 - go-syslog/internal/syslogparser/ very old (4 years) fork of 
 
@@ -168,3 +168,60 @@ https://man7.org/linux/man-pages/man7/unix.7.html
 syslog go client
 https://sirsean.medium.com/srslog-sending-syslog-messages-from-go-a270d9c74ecd
 https://github.com/RackSec/srslog
+
+
+Creating self-signed TLS certificates in Go
+https://atifali.ca/go-self-signed-tls/
+
+How to setup HTTPS web server in Golang with self-signed SSL TLS certificate
+https://www.bastionxp.com/blog/how-to-setup-https-web-server-in-golang-with-self-signed-ssl-tls-certificate/
+
+TLS server with in-memory self-signed certificate
+https://gist.github.com/shivakar/cd52b5594d4912fbeb46
+
+Passing certificate and key as string to ListenAndServeTLS
+https://stackoverflow.com/questions/47857573/passing-certificate-and-key-as-string-to-listenandservetls/47857805
+
+
+Connecting with TLS and verify client identity
+https://docs.nats.io/using-nats/developer/connecting/tls
+https://docs.nats.io/running-a-nats-service/configuration/securing_nats/tls
+
+
+Memphis Metadata TLS connection configuration
+https://docs.memphis.dev/memphis/deployment/production-best-practices#memphis-metadata-tls-connection-configuration
+
+
+Deploy Memphis with TLS (encrypted communication via SSL)
+https://github.com/memphisdev/memphis-k8s#deploy-memphis-with-tls-encrypted-communication-via-ssl
+
+
+https://github.com/memphisdev/memphis/blob/master/server/configs/seed_tls.conf
+  tls {
+    # Route cert
+    cert_file: "../test/configs/certs/server-cert.pem"
+    # Private key
+    key_file:  "../test/configs/certs/server-key.pem"
+    # Specified time for handshake to complete
+    timeout: 2
+
+    # Optional certificate authority verifying connected routes
+    # Required when we have self-signed CA, etc.
+    ca_file:   "../test/configs/certs/ca.pem"
+  }
+
+Memphis Certs
+https://github.com/memphisdev/memphis/tree/master/server/configs/certs
+
+
+Memphis go client library
+https://github.com/memphisdev/memphis.go/tree/master
+
+	// for TLS connection:
+	...
+    memphis.Tls("<cert-client.pem>", "<key-client.pem>",  "<rootCA.pem>")
+    ...
+
+
+	
+
