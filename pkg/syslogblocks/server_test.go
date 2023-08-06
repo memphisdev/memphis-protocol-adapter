@@ -9,11 +9,11 @@ import (
 )
 
 func Test_Init_Finish(t *testing.T) {
-
-	q := kissngoqueue.NewQueue[sputnik.Msg]()
-	mc := newCommunicator(q)
-
-	srv := syslogblocks.NewServer(defaultServerConfiguration(), mc)
+	/*
+		q := kissngoqueue.NewQueue[sputnik.Msg]()
+		mc := newCommunicator(q)
+	*/
+	srv := syslogblocks.NewServer(defaultServerConfiguration())
 	defer stopServer(t, srv)
 	err := srv.Init()
 	if err != nil {

@@ -2,6 +2,7 @@ package syslogblocks
 
 import (
 	"strconv"
+	"sync/atomic"
 	"time"
 
 	"github.com/g41797/sputnik"
@@ -12,16 +13,16 @@ import (
 type SyslogConfiguration struct {
 	// IPv4 address of TCP listener.
 	// For empty string - don't use TCP
-	// Usually "0.0.0.0:514" - listen on all adapters, port 514
-	// "127.0.0.1:514" - listen on loopback "adapter"
+	// e.g "0.0.0.0:5141" - listen on all adapters, port 5141
+	// "127.0.0.1:5141" - listen on loopback "adapter"
 	ADDRTCP string
 
 	// Add after solving tls cert. probleb PORTTCPTLS int
 
 	// IPv4 address of UDP receiver.
 	// For empty string - don't use UDP
-	// Usually "0.0.0.0:514" - receive from all adapters, port 514
-	// "127.0.0.1:514" - receive from loopback "adapter"
+	// Usually "0.0.0.0:5141" - receive from all adapters, port 5141
+	// "127.0.0.1:5141" - receive from loopback "adapter"
 	ADDRUDP string
 
 	// Unix domain socket name - actually file path.
@@ -42,14 +43,14 @@ type SyslogConfiguration struct {
 
 type Server struct {
 	config  SyslogConfiguration
-	bc      sputnik.BlockCommunicator
+	bc      atomic.Pointer[sputnik.BlockCommunicator]
 	syslogd *syslog.Server
 }
 
-func NewServer(conf SyslogConfiguration, bc sputnik.BlockCommunicator) *Server {
+func NewServer(conf SyslogConfiguration) *Server {
 	srv := new(Server)
 	srv.config = conf
-	srv.bc = bc
+	srv.bc = atomic.Pointer[sputnik.BlockCommunicator]{}
 	return srv
 }
 
@@ -86,21 +87,29 @@ func (s *Server) Finish() error {
 	return err
 }
 
+func (s *Server) SetupHandling(bc sputnik.BlockCommunicator) {
+	s.bc.Store(&bc)
+}
+
 func (s *Server) Handle(logParts format.LogParts, msgLen int64, err error) {
+	if s.bc.Load() == nil {
+		return
+	}
+
 	if err != nil {
 		return
 	}
 
-	if !s.ForHandle(logParts) {
+	if !s.forHandle(logParts) {
 		return
 	}
 
-	msg := ToMsg(logParts, msgLen)
+	msg := toMsg(logParts, msgLen)
 
-	s.bc.Send(msg)
+	(*s.bc.Load()).Send(msg)
 }
 
-func (s *Server) ForHandle(logParts format.LogParts) bool {
+func (s *Server) forHandle(logParts format.LogParts) bool {
 	if s.config.SEVERITYLEVEL == -1 {
 		return false
 	}
@@ -124,7 +133,7 @@ func (s *Server) ForHandle(logParts format.LogParts) bool {
 	return sevvalue <= s.config.SEVERITYLEVEL
 }
 
-func ToMsg(logParts format.LogParts, msgLen int64) sputnik.Msg {
+func toMsg(logParts format.LogParts, msgLen int64) sputnik.Msg {
 	if logParts == nil {
 		return nil
 	}
@@ -136,39 +145,41 @@ func ToMsg(logParts format.LogParts, msgLen int64) sputnik.Msg {
 	_, exists := logParts[RFC5424OnlyKey]
 
 	if exists {
-		return ToRFC5424(logParts)
+		return toRFC5424(logParts)
 	} else {
-		return ToRFC3164(logParts)
+		return toRFC3164(logParts)
 	}
 }
 
-func ToRFC5424(logParts format.LogParts) sputnik.Msg {
+// Convert syslog RFC5424 values to strings
+func toRFC5424(logParts format.LogParts) sputnik.Msg {
 	msg := make(sputnik.Msg)
 	msg[RFCFormatKey] = RFC5424
 
 	props := RFC5424Props()
 
 	for k, v := range logParts {
-		msg[k] = ToString(v, props[k])
+		msg[k] = toString(v, props[k])
 	}
 
 	return msg
 }
 
-func ToRFC3164(logParts format.LogParts) sputnik.Msg {
+// Convert syslog RFC3164 values to strings
+func toRFC3164(logParts format.LogParts) sputnik.Msg {
 	msg := make(sputnik.Msg)
 	msg[RFCFormatKey] = RFC3164
 
 	props := RFC3164Props()
 
 	for k, v := range logParts {
-		msg[k] = ToString(v, props[k])
+		msg[k] = toString(v, props[k])
 	}
 
 	return msg
 }
 
-func ToString(val any, typ string) string {
+func toString(val any, typ string) string {
 	result := ""
 
 	if val == nil {
@@ -192,6 +203,7 @@ func ToString(val any, typ string) string {
 	return result
 }
 
+// RFC3164 parameters with type
 func RFC3164Props() map[string]string {
 	return map[string]string{
 		"priority":  "int",
@@ -204,6 +216,7 @@ func RFC3164Props() map[string]string {
 	}
 }
 
+// RFC5424 parameters with type
 func RFC5424Props() map[string]string {
 	return map[string]string{
 		"priority":     "int",
