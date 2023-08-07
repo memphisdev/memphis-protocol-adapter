@@ -82,6 +82,10 @@ func (s *Server) Init() error {
 	return nil
 }
 
+func (s *Server) Start() error {
+	return s.syslogd.Boot()
+}
+
 func (s *Server) Finish() error {
 	err := s.syslogd.Kill()
 	return err

@@ -10,6 +10,9 @@ const (
 
 	ProducerName           = "syslogproducer"
 	ProducerResponsibility = "syslogproducer"
+
+	StorerName           = "syslogstorer"
+	StorerResponsibility = "syslogstorer"
 )
 
 func ReceiverDescriptor() sputnik.BlockDescriptor {
@@ -84,14 +87,18 @@ func (rcv *receiver) brokerConnected(_ sputnik.ServerConnection) {
 
 // OnServerDisconnect:
 func (rcv *receiver) brokerDisconnected() {
-	// For now - disable handling
-	// Next stage - redirect to syslog backup block for save logs in the storage
+	// Redirect to syslog backup block for save logs in the storage
 	rcv.syslogd.SetupHandling(rcv.backup)
 	return
 }
 
 // Run:
 func (rcv *receiver) run(bc sputnik.BlockCommunicator) {
+
+	err := rcv.syslogd.Start()
+	if err != nil {
+		panic(err)
+	}
 
 	rcv.done = make(chan struct{})
 	defer close(rcv.done)
@@ -102,6 +109,10 @@ func (rcv *receiver) run(bc sputnik.BlockCommunicator) {
 	}
 
 	rcv.producer = producer
+
+	// Storer (backup/restore) block - optional
+	// If does not exists, all logs will be discarded
+	rcv.backup, _ = bc.Communicator(StorerResponsibility)
 
 	select {
 	case <-rcv.stop:
