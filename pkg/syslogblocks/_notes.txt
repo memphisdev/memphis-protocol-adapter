@@ -267,3 +267,55 @@ https://github.com/memphisdev/memphis.go/tree/master
 Dynamically update TLS certificates
 https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime	
 
+
+Environment variables under vscode(rest-gateway):
+
+    "env": {
+        "CONNECTION_TOKEN": "memphis",
+        "ROOT_USER": "root",
+        "MEMPHIS_HOST": "localhost",
+        "CLIENT_CERT_PATH": "",
+        "CLIENT_KEY_PATH": "",
+        "ROOT_CA_PATH": "",
+        "USER_PASS_BASED_AUTH": "true",
+        "ROOT_PASSWORD": "memphis",
+        "CLOUD_ENV": "false"
+        "DEV_ENV": "true",
+        "DEBUG": "true",
+    }
+
+Additional variables:
+    "STATION": "syslog",
+    "PRODUCER": "syslog-adapter",
+
+
+Rest-gateway configuration:
+
+    type Configuration struct {
+        MEMPHIS_HOST                   string
+
+        ROOT_USER                      string
+        ROOT_PASSWORD                  string
+
+        CONNECTION_TOKEN               string
+
+        CLIENT_CERT_PATH               string
+        CLIENT_KEY_PATH                string
+        ROOT_CA_PATH                   string
+
+        USER_PASS_BASED_AUTH           bool
+
+        DEBUG                          bool
+        CLOUD_ENV                      bool
+        DEV_ENV                        string ??? bool ???
+
+
+        VERSION                        string
+        JWT_SECRET                     string
+        JWT_EXPIRES_IN_MINUTES         int
+        REFRESH_JWT_SECRET             string
+        REFRESH_JWT_EXPIRES_IN_MINUTES int
+        HTTP_PORT                      string
+
+    }
+
