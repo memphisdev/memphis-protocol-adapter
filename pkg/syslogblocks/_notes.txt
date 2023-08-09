@@ -4,6 +4,17 @@ https://blog.datalust.co/seq-input-syslog/
 RFC5424 syslog Message Format introduction
 https://hackmd.io/@njjack/syslogformat
 
+Numerical         Severity       
+code
+              0                 Emergency: system is unusable
+              1                 Alert: action must be taken immediately
+              2                 Critical: critical conditions
+              3                 Error: error conditions
+              4                 Warning: warning conditions
+              5                 Notice: normal but significant condition
+              6                 Informational: informational messages
+              7                 Debug: debug-level messages
+
 syslog messages examples
 
     with no STRUCTURED-DATA
@@ -253,5 +264,6 @@ https://github.com/memphisdev/memphis.go/tree/master
     ...
 
 
-	
+Dynamically update TLS certificates
+https://opensource.com/article/22/9/dynamically-update-tls-certificates-golang-server-no-downtime	
 

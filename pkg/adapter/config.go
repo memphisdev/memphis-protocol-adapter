@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -30,6 +31,10 @@ func newConfig(cfPath string) *config {
 func (conf *config) unmarshal(confName string, result any) error {
 	fPath := filepath.Join(conf.confPath, strings.ToLower(confName))
 	fPath += ".json"
-	err := gonfig.GetConf(fPath, result)
+	_, err := os.Open(fPath)
+	if err != nil {
+		return err
+	}
+	err = gonfig.GetConf(fPath, result)
 	return err
 }

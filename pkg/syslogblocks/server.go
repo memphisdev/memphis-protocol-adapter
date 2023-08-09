@@ -32,11 +32,21 @@ type SyslogConfiguration struct {
 
 	// The Syslog Severity level ranges between 0 to 7.
 	// Each number points to the relevance of the action reported.
-	// From a debugging message (7) to a completely unusable system (0)
+	// From a debugging message (7) to a completely unusable system (0):
+	//
+	//	0		Emergency: system is unusable
+	//	1		Alert: action must be taken immediately
+	//	2		Critical: critical conditions
+	//	3		Error: error conditions
+	//	4		Warning: warning conditions
+	//	5		Notice: normal but significant condition
+	//	6		Informational: informational messages
+	//	7		Debug: debug-level messages
+	//
 	// Log with severity above value from configuration will be discarded
 	// Examples:
 	// -1 - all logs will be discarded
-	// 5  - logs with severities 6(informational) and 7(debugging) will be discarded
+	// 5  - logs with severities 6(Informational) and 7(Debug) will be discarded
 	// 7  - all logs will be processed
 	SEVERITYLEVEL int
 }

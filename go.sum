@@ -3,8 +3,8 @@ github.com/RackSec/srslog v0.0.0-20180709174129-a4725f04ec91/go.mod h1:cDLGBht23
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/g41797/kissngoqueue v0.1.5 h1:UrnpxbjOnTnKj/EqpbLA9LjhYkHjnLWMZQqsz3AOBG8=
 github.com/g41797/kissngoqueue v0.1.5/go.mod h1:c1mGfrNWfEP2cHeX04Iji8qYGQevvUmZw5SPZM5M9Cs=
-github.com/g41797/sputnik v0.0.6 h1:VjXfXsG4fyJlJbdCHoVMnKP2tYWhdSYCIgIuzIDG6Cc=
-github.com/g41797/sputnik v0.0.6/go.mod h1:04tTTsXyQdoLDaBVk7OdyTxihDxPtAHtAPF0+Kb4DM0=
+github.com/g41797/sputnik v0.0.7 h1:mzXPcgZ2rMCm/oRWFBe8TYpkKiTIK4Md0+t8w4nv2aQ=
+github.com/g41797/sputnik v0.0.7/go.mod h1:04tTTsXyQdoLDaBVk7OdyTxihDxPtAHtAPF0+Kb4DM0=
 github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=

@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/RackSec/srslog v0.0.0-20180709174129-a4725f04ec91
 	github.com/g41797/kissngoqueue v0.1.5
-	github.com/g41797/sputnik v0.0.6
+	github.com/g41797/sputnik v0.0.7
 	github.com/tkanos/gonfig v1.0.3
 	gopkg.in/mcuadros/go-syslog.v2 v2.3.0
 )

@@ -135,10 +135,14 @@ type client struct {
 	w          *syslogclient.Writer
 }
 
-func newClient() *client {
+func newClientWIthConfig(cnf SyslogConfiguration) *client {
 	result := new(client)
-	result.syslogconf = defaultServerConfiguration()
+	result.syslogconf = cnf
 	return result
+}
+
+func newClient() *client {
+	return newClientWIthConfig(defaultServerConfiguration())
 }
 
 func (cl *client) init() error {

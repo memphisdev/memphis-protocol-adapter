@@ -70,6 +70,7 @@ func (rcv *receiver) init(fact sputnik.ConfFactory) error {
 // Finish:
 func (rcv *receiver) finish(init bool) {
 	if init {
+		rcv.stopSyslog()
 		return
 	}
 
@@ -100,6 +101,8 @@ func (rcv *receiver) run(bc sputnik.BlockCommunicator) {
 		panic(err)
 	}
 
+	defer rcv.stopSyslog()
+
 	rcv.done = make(chan struct{})
 	defer close(rcv.done)
 
@@ -114,12 +117,23 @@ func (rcv *receiver) run(bc sputnik.BlockCommunicator) {
 	// If does not exists, all logs will be discarded
 	rcv.backup, _ = bc.Communicator(StorerResponsibility)
 
-	select {
-	case <-rcv.stop:
-		rcv.syslogd.SetupHandling(nil)
-		rcv.syslogd.Finish()
+	<-rcv.stop
+
+	return
+}
+
+func (rcv *receiver) stopSyslog() {
+
+	if rcv == nil {
 		return
 	}
+
+	if rcv.syslogd == nil {
+		return
+	}
+
+	rcv.syslogd.SetupHandling(nil)
+	rcv.syslogd.Finish()
 
 	return
 }
