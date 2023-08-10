@@ -13,9 +13,9 @@ import (
 // Satellite has 2 app. blocks:
 var blkList []sputnik.BlockDescriptor = []sputnik.BlockDescriptor{
 	// memphis events Producer (simulated by echo block)
-	{sputnik.EchoBlockName, ProducerResponsibility},
+	{Name: sputnik.EchoBlockName, Responsibility: ProducerResponsibility},
 	// syslog Receiver
-	{ReceiverName, ReceiverResponsibility},
+	{Name: ReceiverName, Responsibility: ReceiverResponsibility},
 }
 
 type recvTest struct {
