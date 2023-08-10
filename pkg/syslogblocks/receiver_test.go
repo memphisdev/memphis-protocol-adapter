@@ -12,10 +12,10 @@ import (
 
 // Satellite has 2 app. blocks:
 var blkList []sputnik.BlockDescriptor = []sputnik.BlockDescriptor{
-	// memphis events Producer (simulated by echo block)
-	{Name: sputnik.EchoBlockName, Responsibility: ProducerResponsibility},
+	// memphis events Producer
+	ProducerDescriptor(),
 	// syslog Receiver
-	{Name: ReceiverName, Responsibility: ReceiverResponsibility},
+	ReceiverDescriptor(),
 }
 
 type recvTest struct {
@@ -58,7 +58,10 @@ func (rt *recvTest) factories() sputnik.BlockFactories {
 
 	finfct, _ := sputnik.Factory(sputnik.DefaultFinisherName)
 	confct, _ := sputnik.Factory(sputnik.DefaultConnectorName)
-	echoFact := sputnik.EchoBlockFactory(rt.q)
+
+	// Create producer block factory with mock msgproducer implementation
+	mpr := newMMP(rt.q)
+	pbfct := newPBF(&mpr).createBlock
 
 	factList := []struct {
 		name string
@@ -66,7 +69,7 @@ func (rt *recvTest) factories() sputnik.BlockFactories {
 	}{
 		{sputnik.DefaultFinisherName, finfct},
 		{sputnik.DefaultConnectorName, confct},
-		{sputnik.EchoBlockName, echoFact},
+		{ProducerName, pbfct},
 		{ReceiverName, receiverBlockFactory},
 	}
 

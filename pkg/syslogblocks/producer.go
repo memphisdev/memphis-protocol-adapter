@@ -22,6 +22,8 @@ func newPBF(mp *MsgProducer) *producerBlockFactory {
 
 func (pbf *producerBlockFactory) createBlock() *sputnik.Block {
 	prd := new(producer)
+	prd.mp = *pbf.mp
+
 	block := sputnik.NewBlock(
 		sputnik.WithInit(prd.init),
 		sputnik.WithRun(prd.run),
@@ -136,7 +138,7 @@ loop:
 }
 
 func (prd *producer) processLog(logmsg sputnik.Msg) {
-	sendToBackup := true
+	sendToBackup := prd.backup != nil
 	from, exists := logmsg["from"]
 	if exists && (from == ProducerResponsibility) {
 		sendToBackup = false

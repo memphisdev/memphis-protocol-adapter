@@ -1,15 +1,15 @@
 {
+    "PRODUCER": "syslog-adapter",
+    "STATION": "syslog",
     "MEMPHIS_HOST": "localhost",
-    "USER_PASS_BASED_AUTH": "true",
+    "USER_PASS_BASED_AUTH": true,
     "ROOT_USER": "root",
     "ROOT_PASSWORD": "memphis",
     "CONNECTION_TOKEN": "memphis",
     "CLIENT_CERT_PATH": "",
     "CLIENT_KEY_PATH ": "",
     "ROOT_CA_PATH": "",
-    "PRODUCER": "syslog-adapter",
-    "STATION": "syslog",
-    "CLOUD_ENV": "false",
-    "DEBUG": "true",
-    "DEV_ENV": "true",
+    "CLOUD_ENV": false,
+    "DEBUG": true,
+    "DEV_ENV": true
 }
