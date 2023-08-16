@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/g41797/gonfig"
 	"github.com/g41797/sputnik"
-	"github.com/tkanos/gonfig"
 )
 
 // ConfigFactory returns implementation of sputnik.ConfFactory based on github.com/tkanos/gonfig
@@ -14,7 +14,7 @@ import (
 // - Automatic matching of environment variables
 // - Env. variable for configuration "example" and key "kname" should be set in environment as "EXAMPLE_KNAME"
 // - Value in environment automatically overrides value from the file
-// - Temporary implementation github.com/tkanos/gonfig  will be replaced with github.com/g41797/gonfig
+// - Temporary used github.com/g41797/gonfig  (till merge of PR)
 func ConfigFactory(cfPath string) sputnik.ConfFactory {
 	cnf := newConfig(cfPath)
 	return cnf.unmarshal
