@@ -68,9 +68,18 @@ func (c *BrokerConnector) Connect(cf sputnik.ConfFactory) (conn sputnik.ServerCo
 		return c.getLogger, nil
 	}
 
-	if err = cf(connectorConfName, &c.conf); err != nil {
+	var conf BrokerConnConfig
+
+	if err = cf(connectorConfName, &conf); err != nil {
 		return nil, err
 	}
+
+	return c.ConnectWithConfig(conf)
+}
+
+func (c *BrokerConnector) ConnectWithConfig(conf BrokerConnConfig) (conn sputnik.ServerConnection, err error) {
+
+	c.conf = conf
 
 	if err = c.prepareTLS(); err != nil {
 		return nil, err
@@ -97,7 +106,7 @@ func (c *BrokerConnector) connect() error {
 		AllowReconnect: true,
 		MaxReconnect:   10,
 		ReconnectWait:  3 * time.Second,
-		Name:           "MEMPHIS ADAPTER LOGGER",
+		Name:           "PROTOCOL-ADAPTER LOGGER",
 	}
 
 	creds := c.conf.CONNECTION_TOKEN

@@ -61,7 +61,7 @@ func (rt *recvTest) factories() sputnik.BlockFactories {
 
 	// Create producer block factory with mock msgproducer implementation
 	mpr := newMMP(rt.q)
-	pbfct := newPBF(&mpr).createBlock
+	pbfct := newPBF(mpr).createBlock
 
 	factList := []struct {
 		name string

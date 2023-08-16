@@ -1,5 +1,7 @@
 package syslogblocks
 
+import "github.com/g41797/sputnik"
+
 const MsgProducerConfigName = ProducerName
 
 type MsgPrdConfig struct {
@@ -16,4 +18,25 @@ type MsgPrdConfig struct {
 	CLOUD_ENV            bool
 	DEBUG                bool
 	DEV_ENV              bool
+}
+
+func newMsgProducer() MsgProducer {
+	return &msgProducer{}
+}
+
+var _ MsgProducer = &msgProducer{}
+
+type msgProducer struct {
+}
+
+func (mpr *msgProducer) Connect(cf sputnik.ConfFactory) error {
+	return nil
+}
+
+func (mpr *msgProducer) Disconnect() {
+
+}
+
+func (mpr *msgProducer) Produce(msg sputnik.Msg) error {
+	return nil
 }

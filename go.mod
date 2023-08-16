@@ -15,7 +15,6 @@ require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
-	github.com/kr/pretty v0.3.1 // indirect
 	github.com/nats-io/nats-server/v2 v2.9.21 // indirect
 	github.com/nats-io/nkeys v0.4.4 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
@@ -26,5 +25,3 @@ require (
 )
 
 replace github.com/tkanos/gonfig => /home/g41797/go/pkg/mod/github.com/tkanos/gonfig/
-
-replace gopkg.in/mcuadros/go-syslog.v2 => /home/g41797/go/pkg/mod/github.com/g41797/go-syslog

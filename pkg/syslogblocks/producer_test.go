@@ -37,7 +37,3 @@ func (mp *MockMsgProducer) Produce(msg sputnik.Msg) error {
 
 	return fmt.Errorf("q canceled")
 }
-
-func newMsgProducer() *MsgProducer {
-	return nil
-}

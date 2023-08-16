@@ -322,6 +322,8 @@ Rest-gateway configuration:
 Embedded NATS:
 https://natsbyexample.com/examples/embedded/mtls/go
 
+https://github.com/anycable/anycable-go/blob/master/enats/enats.go
+
 
 Postgress Configuration:
 

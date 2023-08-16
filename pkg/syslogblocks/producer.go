@@ -14,9 +14,9 @@ type producerBlockFactory struct {
 	mp *MsgProducer
 }
 
-func newPBF(mp *MsgProducer) *producerBlockFactory {
+func newPBF(mp MsgProducer) *producerBlockFactory {
 	result := new(producerBlockFactory)
-	result.mp = mp
+	result.mp = &mp
 	return result
 }
 
