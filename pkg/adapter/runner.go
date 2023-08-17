@@ -23,7 +23,7 @@ func StartRunner(confFolder string) (*Runner, error) {
 		return nil, err
 	}
 	rnr := new(Runner)
-	err = rnr.start(info)
+	err = rnr.Start(info)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func prepare(confFolder string) (*runnerInfo, error) {
 	return &ri, err
 }
 
-func (rnr *Runner) start(ri *runnerInfo) error {
+func (rnr *Runner) Start(ri *runnerInfo) error {
 
 	sp, err := sputnik.NewSputnik(
 		sputnik.WithAppBlocks(ri.appBlocks),

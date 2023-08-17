@@ -347,3 +347,12 @@ Postgress Configuration:
 Build broker:
     go build -o ./_obj/memphis main.go
 
+Send messages to syslogd:
+https://www.poftut.com/linux-logger-command-usage-tutorial-with-examples/
+
+
+Parsing and Generating YAML in Go
+https://betterprogramming.pub/parsing-and-creating-yaml-in-go-crash-course-2ec10b7db850
+
+JSON Arrays:
+https://www.sohamkamani.com/golang/json/#json-arrays
