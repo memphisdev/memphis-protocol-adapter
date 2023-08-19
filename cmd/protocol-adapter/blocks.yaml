@@ -1,9 +1,0 @@
-Blocks:
-- Name: syslogreceiver
-  Responsibility: syslogreceiver
-- Name: syslogproducer
-  Responsibility: syslogproducer
-- Name: restreceiver
-  Responsibility: restreceiver
-- Name: restproducer
-  Responsibility: restproducer  
