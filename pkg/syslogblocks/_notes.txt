@@ -356,3 +356,40 @@ https://betterprogramming.pub/parsing-and-creating-yaml-in-go-crash-course-2ec10
 
 JSON Arrays:
 https://www.sohamkamani.com/golang/json/#json-arrays
+
+
+Convert JSON to Go struct:
+https://mholt.github.io/json-to-go/
+
+
+"Login":
+
+    memphis 
+        stand-alone.conf:
+
+                    # Memphis ports
+                    port: 6666
+
+        launch.json "stand-alone" configuration
+                    "USER_PASS_BASED_AUTH": "true",
+                    "CONNECTION_TOKEN": "memphis",
+
+    rest-gateway
+        launch.json
+                    "DEV_ENV": "true",
+                    "DEBUG": "true",
+                    "CONNECTION_TOKEN": "memphis",
+                    "ROOT_USER": "root",
+                    "MEMPHIS_HOST": "localhost",
+                    "CLIENT_CERT_PATH": "",
+                    "CLIENT_KEY_PATH": "",
+                    "ROOT_CA_PATH": "",
+                    "USER_PASS_BASED_AUTH": "true",
+                    "ROOT_PASSWORD": "memphis",
+                    "CLOUD_ENV": "false"
+
+
+Lower version of nats.go:
+go: downloading github.com/nats-io/nats-server/v2 v2.9.17
+go: downgraded github.com/nats-io/nats-server/v2 v2.9.21 => v2.9.17
+go: downgraded github.com/nats-io/nats.go v1.28.0 => v1.25.0

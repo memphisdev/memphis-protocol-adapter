@@ -1,10 +1,10 @@
 [
   {
     "Name": "syslogreceiver",
-    "Responsibility": "syslogreceiver",
+    "Responsibility": "syslogreceiver"
   },
   {
     "Name": "syslogproducer",
-    "Responsibility": "syslogproducer",
+    "Responsibility": "syslogproducer"
   }
 ]

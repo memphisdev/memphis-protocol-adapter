@@ -1,8 +1,10 @@
 package adapter
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/g41797/sputnik"
@@ -45,6 +47,16 @@ func (rnr *Runner) Stop() {
 	}
 
 	rnr.kill()
+
+	return
+}
+
+func (rnr *Runner) Wait() {
+	if rnr == nil {
+		return
+	}
+
+	<-rnr.done
 
 	return
 }
@@ -104,5 +116,16 @@ func (rnr *Runner) Start(ri *runnerInfo) error {
 }
 
 func ReadAppBlocks(confFolder string) ([]sputnik.BlockDescriptor, error) {
-	return nil, nil
+	fPath := filepath.Join(confFolder, "blocks.json")
+
+	blocksRaw, err := os.ReadFile(fPath)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []sputnik.BlockDescriptor
+
+	json.Unmarshal([]byte(blocksRaw), &result)
+
+	return result, nil
 }

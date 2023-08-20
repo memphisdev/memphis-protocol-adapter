@@ -1,4 +1,6 @@
 {
+    "PRODUCER": "syslog-adapter",
+    "STATION": "syslog",
     "MEMPHIS_HOST": "localhost",
     "USER_PASS_BASED_AUTH": true,
     "ROOT_USER": "root",

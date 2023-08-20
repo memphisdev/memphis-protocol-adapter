@@ -106,7 +106,8 @@ func (c *BrokerConnector) connect() error {
 		AllowReconnect: true,
 		MaxReconnect:   10,
 		ReconnectWait:  3 * time.Second,
-		Name:           "PROTOCOL-ADAPTER LOGGER",
+		Name:           "MEMPHIS HTTP LOGGER",
+		//Name:           "PROTOCOL-ADAPTER LOGGER",
 	}
 
 	creds := c.conf.CONNECTION_TOKEN
