@@ -22,6 +22,11 @@ func main() {
 	flag.StringVar(&confFolder, "cf", "", "Path of folder with config files")
 	flag.Parse()
 
+	if len(confFolder) == 0 {
+		fmt.Fprintln(os.Stderr, fmt.Errorf("-cf <path of config folder> - was not set!!!"))
+		os.Exit(1)
+	}
+
 	rnr, err := adapter.StartRunner(confFolder)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
