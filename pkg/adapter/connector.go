@@ -137,33 +137,17 @@ func (c *BrokerConnector) connect() error {
 
 func (c *BrokerConnector) prepareTLS() error {
 
-	if c.conf.CLIENT_CERT_PATH == "" || c.conf.CLIENT_KEY_PATH != "" || c.conf.ROOT_CA_PATH != "" {
-		return nil
-	}
-
 	if c.tlsConfig != nil {
 		return nil
 	}
 
-	cert, err := tls.LoadX509KeyPair(c.conf.CLIENT_CERT_PATH, c.conf.CLIENT_KEY_PATH)
-	if err != nil {
-		return err
-	}
-	cert.Leaf, err = x509.ParseCertificate(cert.Certificate[0])
-	if err != nil {
-		return err
-	}
-	TLSConfig := &tls.Config{MinVersion: tls.VersionTLS12}
-	TLSConfig.Certificates = []tls.Certificate{cert}
-	certs := x509.NewCertPool()
+	t, err := PrepareTLS(c.conf.CLIENT_CERT_PATH, c.conf.CLIENT_KEY_PATH, c.conf.ROOT_CA_PATH)
 
-	pemData, err := os.ReadFile(c.conf.ROOT_CA_PATH)
 	if err != nil {
 		return err
 	}
-	certs.AppendCertsFromPEM(pemData)
-	TLSConfig.RootCAs = certs
-	c.tlsConfig = TLSConfig
+
+	c.tlsConfig = t
 
 	return nil
 }
@@ -243,4 +227,32 @@ func (c *BrokerConnector) Write(p []byte) (n int, err error) {
 	}
 
 	return len(p), nil
+}
+
+func PrepareTLS(CLIENT_CERT_PATH, CLIENT_KEY_PATH, ROOT_CA_PATH string) (*tls.Config, error) {
+
+	if CLIENT_CERT_PATH == "" || CLIENT_KEY_PATH != "" || ROOT_CA_PATH != "" {
+		return nil, nil
+	}
+
+	cert, err := tls.LoadX509KeyPair(CLIENT_CERT_PATH, CLIENT_KEY_PATH)
+	if err != nil {
+		return nil, err
+	}
+	cert.Leaf, err = x509.ParseCertificate(cert.Certificate[0])
+	if err != nil {
+		return nil, err
+	}
+	TLSConfig := &tls.Config{MinVersion: tls.VersionTLS12}
+	TLSConfig.Certificates = []tls.Certificate{cert}
+	certs := x509.NewCertPool()
+
+	pemData, err := os.ReadFile(ROOT_CA_PATH)
+	if err != nil {
+		return nil, err
+	}
+	certs.AppendCertsFromPEM(pemData)
+	TLSConfig.RootCAs = certs
+
+	return TLSConfig, nil
 }

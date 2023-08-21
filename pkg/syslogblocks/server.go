@@ -6,30 +6,12 @@ import (
 	"time"
 
 	"github.com/g41797/sputnik"
+	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 	"gopkg.in/mcuadros/go-syslog.v2"
 	"gopkg.in/mcuadros/go-syslog.v2/format"
 )
 
 type SyslogConfiguration struct {
-	// IPv4 address of TCP listener.
-	// For empty string - don't use TCP
-	// e.g "0.0.0.0:5141" - listen on all adapters, port 5141
-	// "127.0.0.1:5141" - listen on loopback "adapter"
-	ADDRTCP string
-
-	// Add after solving tls cert. probleb PORTTCPTLS int
-
-	// IPv4 address of UDP receiver.
-	// For empty string - don't use UDP
-	// Usually "0.0.0.0:5141" - receive from all adapters, port 5141
-	// "127.0.0.1:5141" - receive from loopback "adapter"
-	ADDRUDP string
-
-	// Unix domain socket name - actually file path.
-	// For empty string - don't use UDS
-	// Regarding limitations see https://man7.org/linux/man-pages/man7/unix.7.html
-	UDSPATH string
-
 	// The Syslog Severity level ranges between 0 to 7.
 	// Each number points to the relevance of the action reported.
 	// From a debugging message (7) to a completely unusable system (0):
@@ -49,6 +31,30 @@ type SyslogConfiguration struct {
 	// 5  - logs with severities 6(Informational) and 7(Debug) will be discarded
 	// 7  - all logs will be processed
 	SEVERITYLEVEL int
+
+	// IPv4 address of TCP listener.
+	// For empty string - don't use TCP
+	// e.g "0.0.0.0:5141" - listen on all adapters, port 5141
+	// "127.0.0.1:5141" - listen on loopback "adapter"
+	ADDRTCP string
+
+	// IPv4 address of UDP receiver.
+	// For empty string - don't use UDP
+	// Usually "0.0.0.0:5141" - receive from all adapters, port 5141
+	// "127.0.0.1:5141" - receive from loopback "adapter"
+	ADDRUDP string
+
+	// Unix domain socket name - actually file path.
+	// For empty string - don't use UDS
+	// Regarding limitations see https://man7.org/linux/man-pages/man7/unix.7.html
+	UDSPATH string
+
+	// TLS section: Listening on non empty ADDRTCPTLS will start only
+	// for valid tls configuration (created using last 3 parameters)
+	ADDRTCPTLS       string
+	CLIENT_CERT_PATH string
+	CLIENT_KEY_PATH  string
+	ROOT_CA_PATH     string
 }
 
 type Server struct {
@@ -79,6 +85,21 @@ func (s *Server) Init() error {
 		err := s.syslogd.ListenUDP(s.config.ADDRUDP)
 		if err != nil {
 			return err
+		}
+	}
+
+	if len(s.config.ADDRTCPTLS) != 0 {
+		t, err := adapter.PrepareTLS(s.config.CLIENT_CERT_PATH, s.config.CLIENT_KEY_PATH, s.config.ROOT_CA_PATH)
+
+		if err != nil {
+			return err
+		}
+
+		if t != nil {
+			err = s.syslogd.ListenTCPTLS(s.config.ADDRUDP, t)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
