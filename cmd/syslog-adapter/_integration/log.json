@@ -1,0 +1,46 @@
+{
+    "MsgHeaders": {
+      "app_name": [
+        "g41797"
+      ],
+      "client": [
+        ""
+      ],
+      "facility": [
+        "1"
+      ],
+      "hostname": [
+        "BLKF"
+      ],
+      "message": [
+        "21-08-2023_12-56-23"
+      ],
+      "msg_id": [
+        "-"
+      ],
+      "priority": [
+        "9"
+      ],
+      "proc_id": [
+        "-"
+      ],
+      "rfc": [
+        "RFC5424"
+      ],
+      "severity": [
+        "1"
+      ],
+      "structured_data": [
+        "[timeQuality tzKnown=\"1\" isSynced=\"1\" syncAccuracy=\"194175\"]"
+      ],
+      "timestamp": [
+        "2023-08-21 09:56:23.324393 +0000 UTC"
+      ],
+      "tls_peer": [
+        ""
+      ],
+      "version": [
+        "1"
+      ]
+    }
+  }

@@ -389,7 +389,8 @@ https://mholt.github.io/json-to-go/
                     "CLOUD_ENV": "false"
 
 
-Lower version of nats.go:
-go: downloading github.com/nats-io/nats-server/v2 v2.9.17
-go: downgraded github.com/nats-io/nats-server/v2 v2.9.21 => v2.9.17
-go: downgraded github.com/nats-io/nats.go v1.28.0 => v1.25.0
+
+
+Send log to syslog- adapter:
+
+    logger  --rfc5424 --server 127.0.0.1 --port 5141 --priority user.alert  $(date +%d-%m-%Y_%H-%M-%S)
