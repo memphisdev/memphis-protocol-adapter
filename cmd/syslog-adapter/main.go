@@ -31,36 +31,3 @@ func main() {
 	rnr.Wait()
 	return
 }
-
-/*
-func TryConnect() error {
-
-	hostname := "localhost"
-	username := "$memphis"
-	creds := "memphis_memphis"
-
-	var nc *nats.Conn
-	var err error
-
-	natsOpts := nats.Options{
-		Url:            hostname + ":6666",
-		AllowReconnect: true,
-		MaxReconnect:   10,
-		ReconnectWait:  3 * time.Second,
-		Name:           "MEMPHIS HTTP LOGGER",
-	}
-
-	natsOpts.Password = creds
-	natsOpts.User = username
-	natsOpts.TLSConfig = nil
-
-	nc, err = natsOpts.Connect()
-	if err != nil {
-		return err
-	}
-
-	nc.Close()
-
-	return nil
-}
-*/

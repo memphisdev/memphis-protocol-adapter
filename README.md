@@ -4,45 +4,35 @@
 
 ```bash
 memphis-protocol-adapter
+.
 ├── cmd
-│   ├── protocol-adapter
-│   │   ├── blocks.yaml
-│   │   └── main.go
-│   ├── rest-gateway
-│   │   ├── blocks.yaml
-│   │   └── main.go
-│   └── syslog-adapter
-│       ├── blocks.yaml
-│       ├── main.go
-│       └── syslog-adapter
-├── _config
-│   ├── protocol-adapter
-│   │   └── connector.json
-│   ├── rest-gateway
-│   │   └── connector.json
-│   └── syslog-adapter
-│       └── connector.json
+│   ├── protocol-adapter
+│   │   └── main.go
+│   ├── rest-gateway
+│   │   └── main.go
+│   └── syslog-adapter
+│       ├── conf
+│       │   ├── blocks.json
+│       │   ├── connector.json
+│       │   ├── syslogproducer.json
+│       │   └── syslogreceiver.json
+│       └── main.go
 ├── go.mod
 ├── go.sum
 ├── LICENSE
-├── Makefile
 ├── pkg
-│   ├── adapter
-│   │   ├── config.go
-│   │   ├── config_test.go
-│   │   ├── _conf_test
-│   │   │   ├── example.json
-│   │   │   └── example.yaml
-│   │   ├── connector.go
-│   │   └── logger.go
-│   ├── rest
-│   │   ├── producer.go
-│   │   └── receiver.go
-│   └── syslog
-│       ├── producer.go
-│       └── receiver.go
-├── README.md
-└── scripts
+│   ├── adapter
+│   │   ├── config.go
+│   │   ├── connector.go
+│   │   ├── logger.go
+│   │   └── runner.go
+│   ├── rest
+│   └── syslogblocks
+│       ├── msgproducer.go
+│       ├── producer.go
+│       ├── receiver.go
+│       └── server.go
+└── README.md
 ```
 
 ### `/cmd`
@@ -55,58 +45,22 @@ Applications for this project:
 
 #### `/cmd/syslog-adapter`
 
-Executable includes support for *syslog* (see blocks.yaml)
-```yaml
-Blocks:
-- Name: syslogreceiver
-  Responsibility: syslogreceiver
-- Name: syslogproducer
-  Responsibility: syslogproducer
-```
+##### `/cmd/syslog-adapter/conf`
 
-It includes 2 **Blocks**:
-* syslogreceiver - receives syslogs from the clients
-  * implemented in pkg/syslog/receiver.go
-* syslogproducer - acts as memphis client, produces syslog events
-   * implemented in pkg/syslog/producer.go
 
 #### `/cmd/rest-gateway`
 
-Executable includes support for *REST-HTTP* (see blocks.yaml)
-```yaml
-Blocks:
-- Name: restreceiver
-  Responsibility: restreceiver
-- Name: restproducer
-  Responsibility: restproducer
-```
-
-It includes 2 **Blocks**:
-* restreceiver - receives HTTP REST requests from the clients
-  * implemented in pkg/rest/receiver.go
-* restproducer - acts as memphis client
-   * implemented in pkg/rest/producer.go
-
+  Placeholder for the rest gateway 
 
 #### `/cmd/protocol-adapter`
 
-Executable includes support for *syslog* and *rest* (see blocks.yaml)
-```yaml
-Blocks:
-- Name: syslogreceiver
-  Responsibility: syslogreceiver
-- Name: syslogproducer
-  Responsibility: syslogproducer
-- Name: restreceiver
-  Responsibility: restreceiver
-- Name: restproducer
-  Responsibility: restproducer  
-```
+  Placeholder for the process uniting all adapters
+
 
 ### `/pkg`
 
 Packages of the project
-* rest - code for the rest gateway (based on [Memphis Go SDK](https://github.com/memphisdev/memphis.go) and [sputnik](https://github.com/g41797/sputnik))
+* rest - placeholder for the rest gateway 
 * syslog - code for the syslog adapter(based on [Memphis Go SDK](https://github.com/memphisdev/memphis.go) and [sputnik](https://github.com/g41797/sputnik))
 * adapter - runtime 
 
