@@ -23,12 +23,12 @@
 
   RFC3164 message consists of following parts:
   - priority
-	- facility 
-	- severity
-	- timestamp
-	- hostname
+  - facility 
+  - severity
+  - timestamp
+  - hostname
   - tag
-	- content
+  - content
 
   Example: after send of RFC3164 log message with current time as *content* to syslog-adapter
 ```bash
@@ -77,17 +77,17 @@
   ### RFC5424
 
   RFC5424 message consists of following parts:
-  - priority
-	- facility 
-	- severity
-	- timestamp
-	- hostname
-	- version
-	- app_name
-  - proc_id
-	- msg_id
-	- structured_data
-	- message
+ - priority
+ - facility 
+ - severity
+ - timestamp
+ - hostname
+ - version
+ - app_name
+ - proc_id
+ - msg_id
+ - structured_data
+ - message
 
   Example: after send of RFC5424 log message with current time as *message* to syslog-adapter
 ```bash
