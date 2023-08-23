@@ -1,3 +1,9 @@
+RFC 3164:
+            <https://tools.ietf.org/html/rfc3164>
+
+RFC 5424:
+            <https://tools.ietf.org/html/rfc5424>
+
 Analyze syslog messages
 https://blog.datalust.co/seq-input-syslog/
 

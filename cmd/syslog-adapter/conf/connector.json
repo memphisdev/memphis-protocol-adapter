@@ -1,5 +1,6 @@
 {
-    "MEMPHIS_HOST": "localhost",
+    "MEMPHIS_ADDR": "localhost:6666",
+    "MEMPHIS_CLIENT":"MEMPHIS HTTP LOGGER",
     "USER_PASS_BASED_AUTH": true,
     "ROOT_USER": "root",
     "ROOT_PASSWORD": "memphis",

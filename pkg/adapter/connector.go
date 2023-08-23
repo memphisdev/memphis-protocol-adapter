@@ -31,7 +31,8 @@ const (
 )
 
 type BrokerConnConfig struct {
-	MEMPHIS_HOST         string
+	MEMPHIS_ADDR         string
+	MEMPHIS_CLIENT       string
 	ROOT_USER            string
 	ROOT_PASSWORD        string
 	CONNECTION_TOKEN     string
@@ -102,12 +103,11 @@ func (c *BrokerConnector) connect() error {
 	var err error
 
 	natsOpts := nats.Options{
-		Url:            c.conf.MEMPHIS_HOST + ":6666",
+		Url:            c.conf.MEMPHIS_ADDR,
 		AllowReconnect: true,
 		MaxReconnect:   10,
 		ReconnectWait:  3 * time.Second,
-		Name:           "MEMPHIS HTTP LOGGER",
-		//Name:           "PROTOCOL-ADAPTER LOGGER",
+		Name:           c.conf.MEMPHIS_CLIENT,
 	}
 
 	creds := c.conf.CONNECTION_TOKEN
