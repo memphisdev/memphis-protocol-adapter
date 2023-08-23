@@ -1,5 +1,7 @@
 # MEMPHIS PROTOCOL ADAPTER
 
+[![Go](https://github.com/g41797/memphis-protocol-adapter/actions/workflows/go.yml/badge.svg)](https://github.com/g41797/memphis-protocol-adapter/actions/workflows/go.yml)
+
   This project is developing in accordance with [#849](https://github.com/memphisdev/memphis/issues/849)
 
   First developed adapter is **syslog-adapter**
