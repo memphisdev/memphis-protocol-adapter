@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,6 +10,28 @@ import (
 
 	"github.com/g41797/sputnik"
 )
+
+func Run() {
+
+	var confFolder string
+	flag.StringVar(&confFolder, "cf", "", "Path of folder with config files")
+	flag.Parse()
+
+	if len(confFolder) == 0 {
+		fmt.Fprintln(os.Stderr, fmt.Errorf("-cf <path of config folder> - was not set!!!"))
+		os.Exit(1)
+	}
+
+	rnr, err := StartRunner(confFolder)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	rnr.Wait()
+	return
+
+}
 
 const brokerCheckTimeOut = time.Second
 
