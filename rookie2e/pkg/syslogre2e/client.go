@@ -4,29 +4,37 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/RackSec/srslog"
 	"github.com/g41797/sputnik"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslogblocks"
-	"github.com/memphisdev/memphis.go"
 )
 
-func NewLogWriter(cnf syslogblocks.SyslogConfiguration, rfcForm srslog.Formatter) (*srslog.Writer, error) {
-	w, err := srslog.Dial("tcp", cnf.ADDRTCP, srslog.LOG_ALERT, "re2e")
-	if err != nil {
-		return nil, err
-	}
-	w.SetFormatter(rfcForm)
-	return w, nil
+const (
+	SyslogClientName             = "syslogclient"
+	SyslogClientResponsibility   = "syslogclient"
+	SyslogConsumerName           = "syslogconsumer"
+	SyslogConsumerResponsibility = "syslogconsumer"
+)
+
+func SyslogClientDescriptor() sputnik.BlockDescriptor {
+	return sputnik.BlockDescriptor{Name: SyslogClientName, Responsibility: SyslogClientResponsibility}
 }
 
-func SendQuit() error {
-	cproc, err := os.FindProcess(os.Getpid())
-	if err != nil {
-		return err
-	}
-	err = cproc.Signal(os.Interrupt)
-	return err
+func init() {
+	sputnik.RegisterBlockFactory(SyslogClientName, syslogClientBlockFactory)
+}
+
+func syslogClientBlockFactory() *sputnik.Block {
+	client := new(client)
+	block := sputnik.NewBlock(
+		sputnik.WithInit(client.init),
+		sputnik.WithRun(client.run),
+		sputnik.WithFinish(client.finish),
+		sputnik.WithOnMsg(client.processBrokerMsg),
+	)
+	return block
 }
 
 const MAX_LOG_MESSAGES = 1000
@@ -46,10 +54,10 @@ type client struct {
 	states   []int
 	successN int
 
-	startFlow chan struct{}
-	stopFlow  chan struct{}
-	brokMsg   chan *memphis.Msg
-	nextSend  chan struct{}
+	startFlow  chan struct{}
+	stopFlow   chan struct{}
+	msgheaders chan map[string]string
+	nextSend   chan struct{}
 
 	stop chan struct{}
 	done chan struct{}
@@ -66,7 +74,7 @@ func (cl *client) init(fact sputnik.ConfFactory) error {
 	cl.done = make(chan struct{}, 1)
 	cl.startFlow = make(chan struct{}, 1)
 	cl.stopFlow = make(chan struct{}, 1)
-	cl.brokMsg = make(chan *memphis.Msg)
+	cl.msgheaders = make(chan map[string]string)
 	cl.nextSend = make(chan struct{})
 
 	return nil
@@ -91,19 +99,24 @@ func (cl *client) run(bc sputnik.BlockCommunicator) {
 
 	defer close(cl.done)
 
+	ticker := time.NewTicker(20 * time.Second)
+	defer ticker.Stop()
+
 loop:
 	for {
 		select {
+		case headers := <-cl.msgheaders:
+			cl.update(headers)
+		case <-cl.nextSend:
+			cl.sendNext()
 		case <-cl.stop:
 			break loop
 		case <-cl.startFlow:
 			cl.startflow()
 		case <-cl.stopFlow:
 			cl.stopflow()
-		case brokermsg := <-cl.brokMsg:
-			cl.update(brokermsg)
-		case <-cl.nextSend:
-			cl.sendNext()
+		case <-ticker.C:
+			cl.report()
 		}
 	}
 
@@ -130,9 +143,9 @@ func (cl *client) processBrokerMsg(brokermsg sputnik.Msg) {
 	case "stop":
 		cl.stopFlow <- struct{}{}
 	case "consumed":
-		brmsg, ok := brokermsg["consumed"].(*memphis.Msg)
-		if ok && brmsg != nil {
-			cl.brokMsg <- brmsg
+		headers, ok := brokermsg["consumed"].(map[string]string)
+		if ok && headers != nil {
+			cl.msgheaders <- headers
 		}
 	}
 
@@ -181,12 +194,7 @@ func (cl *client) stopflow() {
 	SendQuit()
 }
 
-func (cl *client) update(brmsg *memphis.Msg) {
-	if brmsg == nil {
-		return
-	}
-
-	hdrs := brmsg.GetHeaders()
+func (cl *client) update(hdrs map[string]string) {
 	if hdrs == nil {
 		return
 	}
@@ -225,7 +233,9 @@ func (cl *client) update(brmsg *memphis.Msg) {
 }
 
 func (cl *client) report() {
-	fmt.Printf("\n\n\t\tWas send %d messages. Successfully consumed %d\n\n", cl.currIndx, cl.successN)
+	if cl.currIndx > 0 {
+		fmt.Printf("\n\n\t\tWas send %d messages. Successfully consumed %d\n\n", cl.currIndx, cl.successN)
+	}
 	return
 }
 
@@ -252,4 +262,22 @@ func (cl *client) closeLoggers() {
 			lgr.Close()
 		}
 	}
+}
+
+func NewLogWriter(cnf syslogblocks.SyslogConfiguration, rfcForm srslog.Formatter) (*srslog.Writer, error) {
+	w, err := srslog.Dial("tcp", cnf.ADDRTCP, srslog.LOG_ALERT, "re2e")
+	if err != nil {
+		return nil, err
+	}
+	w.SetFormatter(rfcForm)
+	return w, nil
+}
+
+func SendQuit() error {
+	cproc, err := os.FindProcess(os.Getpid())
+	if err != nil {
+		return err
+	}
+	err = cproc.Signal(os.Interrupt)
+	return err
 }
