@@ -7,15 +7,14 @@ import (
 	"time"
 
 	"github.com/RackSec/srslog"
+	"github.com/RoaringBitmap/roaring"
 	"github.com/g41797/sputnik"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslogblocks"
 )
 
 const (
-	SyslogClientName             = "syslogclient"
-	SyslogClientResponsibility   = "syslogclient"
-	SyslogConsumerName           = "syslogconsumer"
-	SyslogConsumerResponsibility = "syslogconsumer"
+	SyslogClientName           = "syslogclient"
+	SyslogClientResponsibility = "syslogclient"
 )
 
 func SyslogClientDescriptor() sputnik.BlockDescriptor {
@@ -37,22 +36,17 @@ func syslogClientBlockFactory() *sputnik.Block {
 	return block
 }
 
-const MAX_LOG_MESSAGES = 1000
-
-const (
-	SENDOK = iota + 1
-	CONSUMED
-)
+const MAX_LOG_MESSAGES = 10000
 
 type client struct {
 	conf    syslogblocks.SyslogConfiguration
 	loggers []*srslog.Writer
 	bc      sputnik.BlockCommunicator
 
-	started  bool
-	currIndx int
-	states   []int
-	successN int
+	started   bool
+	currIndx  int
+	processed *roaring.Bitmap
+	successN  int
 
 	startFlow  chan struct{}
 	stopFlow   chan struct{}
@@ -99,10 +93,34 @@ func (cl *client) run(bc sputnik.BlockCommunicator) {
 
 	defer close(cl.done)
 
-	ticker := time.NewTicker(20 * time.Second)
+	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
 
 loop:
+	for {
+		select {
+		case <-cl.stop:
+			return
+		case <-ticker.C:
+			if err := cl.openLoggers(); err == nil {
+				break loop
+			}
+		}
+	}
+
+	cl.runLoop()
+
+	cl.closeLoggers()
+	cl.report()
+
+	return
+}
+
+func (cl *client) runLoop() {
+
+	ticker := time.NewTicker(20 * time.Second)
+	defer ticker.Stop()
+
 	for {
 		select {
 		case headers := <-cl.msgheaders:
@@ -110,7 +128,7 @@ loop:
 		case <-cl.nextSend:
 			cl.sendNext()
 		case <-cl.stop:
-			break loop
+			return
 		case <-cl.startFlow:
 			cl.startflow()
 		case <-cl.stopFlow:
@@ -119,11 +137,6 @@ loop:
 			cl.report()
 		}
 	}
-
-	cl.closeLoggers()
-	cl.report()
-
-	return
 }
 
 // OnMsg:
@@ -157,13 +170,8 @@ func (cl *client) startflow() {
 		return
 	}
 
-	if err := cl.openLoggers(); err != nil {
-		cl.stopflow()
-		return
-	}
-
 	cl.started = true
-	cl.states = make([]int, MAX_LOG_MESSAGES, MAX_LOG_MESSAGES)
+	cl.processed = roaring.New()
 	cl.sendNext()
 }
 
@@ -182,7 +190,6 @@ func (cl *client) sendNext() {
 		return
 	}
 
-	cl.states[cl.currIndx] = SENDOK
 	cl.currIndx++
 	cl.nextSend <- struct{}{}
 
@@ -224,11 +231,15 @@ func (cl *client) update(hdrs map[string]string) {
 		return
 	}
 
-	status := cl.states[msgIndex]
-	if status == SENDOK {
-		cl.states[msgIndex] = CONSUMED
-		cl.successN++
+	if msgIndex > cl.currIndx {
+		return
 	}
+
+	if wasAdded := cl.processed.CheckedAdd(uint32(msgIndex)); !wasAdded {
+		return
+	}
+
+	cl.successN++
 	return
 }
 

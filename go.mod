@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/RackSec/srslog v0.0.0-20180709174129-a4725f04ec91
+	github.com/RoaringBitmap/roaring v1.5.0
 	github.com/g41797/gonfig v1.0.1
 	github.com/g41797/kissngoqueue v0.1.5
 	github.com/g41797/sputnik v0.0.8
@@ -13,6 +14,7 @@ require (
 )
 
 require (
+	github.com/bits-and-blooms/bitset v1.2.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
@@ -23,6 +25,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/mschoch/smat v0.2.0 // indirect
 	github.com/nats-io/nats-server/v2 v2.9.17 // indirect
 	github.com/nats-io/nkeys v0.4.4 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
