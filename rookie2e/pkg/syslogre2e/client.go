@@ -43,11 +43,11 @@ type client struct {
 	loggers []*srslog.Writer
 	bc      sputnik.BlockCommunicator
 
-	started   bool
-	currIndx  int
-	processed *roaring.Bitmap
-	successN  int
-
+	started    bool
+	currIndx   int
+	processed  *roaring.Bitmap
+	successN   int
+	recvN      int
 	startFlow  chan struct{}
 	stopFlow   chan struct{}
 	msgheaders chan map[string]string
@@ -68,8 +68,8 @@ func (cl *client) init(fact sputnik.ConfFactory) error {
 	cl.done = make(chan struct{}, 1)
 	cl.startFlow = make(chan struct{}, 1)
 	cl.stopFlow = make(chan struct{}, 1)
-	cl.msgheaders = make(chan map[string]string)
-	cl.nextSend = make(chan struct{})
+	cl.msgheaders = make(chan map[string]string, 1)
+	cl.nextSend = make(chan struct{}, 1)
 
 	return nil
 }
@@ -205,6 +205,7 @@ func (cl *client) update(hdrs map[string]string) {
 	if hdrs == nil {
 		return
 	}
+	cl.recvN++
 
 	rfc, ok := hdrs[syslogblocks.RFCFormatKey]
 	if !ok {
@@ -245,7 +246,7 @@ func (cl *client) update(hdrs map[string]string) {
 
 func (cl *client) report() {
 	if cl.currIndx > 0 {
-		fmt.Printf("\n\n\t\tWas send %d messages. Successfully consumed %d\n\n", cl.currIndx, cl.successN)
+		fmt.Printf("\n\n\t\tWas send %d messages. Successfully consumed %d Received %d\n\n", cl.currIndx, cl.successN, cl.recvN)
 	}
 	return
 }

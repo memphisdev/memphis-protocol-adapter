@@ -2,5 +2,10 @@
   {
     "Name": "syslogclient",
     "Responsibility": "syslogclient"
+  },
+  {
+    "Name": "syslogconsumer",
+    "Responsibility": "syslogconsumer"
   }
+
 ]

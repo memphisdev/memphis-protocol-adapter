@@ -85,7 +85,7 @@ func (mpr *msgProducer) Produce(msg sputnik.Msg) error {
 		}
 	}
 
-	err := mpr.producer.Produce(hdrs)
+	err := mpr.producer.Produce("", memphis.MsgHeaders(hdrs))
 
 	return err
 }
