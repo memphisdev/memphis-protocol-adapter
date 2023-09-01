@@ -7,9 +7,9 @@
 ## syslog-adapter
 
   syslog-adapter:
-  - receives messages intended for [syslogd](https://linux.die.net/man/8/syslogd)
-  - sends them (produces using **MsgHeaders**) to the broker
-
+  - receives logs intended for [syslogd](https://linux.die.net/man/8/syslogd)
+  - produces messages to the broker as **MsgHeaders**
+     
   Supported RFCs:
   - [RFC3164](<https://tools.ietf.org/html/rfc3164>)
   - [RFC5424](<https://tools.ietf.org/html/rfc5424>)
@@ -30,7 +30,6 @@
   - tag
   - **content**
 
-
   ### RFC5424
 
   RFC5424 message consists of following symbolic parts:
@@ -46,90 +45,11 @@
  - structured_data
  - **message**
 
-  Example: after send of RFC5424 log message with current time as *message* to syslog-adapter
-```bash
-  timestamp=$(date +%d-%m-%Y_%H-%M-%S)
-  logger  --rfc5424 --server 127.0.0.1 --port 5141 --priority user.alert  $timestamp
-```
-
-  it will be represented in JSON format  on broker side as:
-```json
-{
-  "MsgHeaders": {
-    "app_name": [
-      "g41797"
-    ],
-    "client": [
-      ""
-    ],
-    "facility": [
-      "1"
-    ],
-    "hostname": [
-      "BLKF"
-    ],
-    "message": [
-      "23-08-2023_08-53-54"
-    ],
-    "msg_id": [
-      "-"
-    ],
-    "priority": [
-      "9"
-    ],
-    "proc_id": [
-      "-"
-    ],
-    "rfc": [
-      "RFC5424"
-    ],
-    "severity": [
-      "1"
-    ],
-    "structured_data": [
-      "[timeQuality tzKnown=\"1\" isSynced=\"1\" syncAccuracy=\"45460\"]"
-    ],
-    "timestamp": [
-      "2023-08-23 05:53:54.040825 +0000 UTC"
-    ],
-    "tls_peer": [
-      ""
-    ],
-    "version": [
-      "1"
-    ]
-  }
-}
-```
   ### Non-RFC parts
 
   syslog-adapter adds rfc of produced message to standard parts:
-
-```json
-{
-  "MsgHeaders": {
-  ------------
-    "rfc": [
-      "RFC3164"
-    ],
-  ------------
-}
-}
-
-{
-  "MsgHeaders": {
-  ------------
-    "rfc": [
-      "RFC5424"
-    ],
-  ------------
-}
-}
-
-```
-
-Looks that *client* and *tls_peer* are added by memphis infrastructure.
-
+  - Part name: "rfc"
+  - Values: "RFC3164"|"RFC5424"
 
   ### Facilities and severities
 
