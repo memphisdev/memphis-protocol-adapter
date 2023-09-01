@@ -36,7 +36,7 @@ func syslogClientBlockFactory() *sputnik.Block {
 	return block
 }
 
-const MAX_LOG_MESSAGES = 10000
+const MAX_LOG_MESSAGES = 1000000
 
 type client struct {
 	conf    syslogblocks.SyslogConfiguration
@@ -181,7 +181,6 @@ func (cl *client) sendNext() {
 	}
 
 	if cl.currIndx >= MAX_LOG_MESSAGES {
-		cl.stopflow()
 		return
 	}
 
@@ -241,6 +240,11 @@ func (cl *client) update(hdrs map[string]string) {
 	}
 
 	cl.successN++
+
+	if cl.successN >= MAX_LOG_MESSAGES {
+		cl.stopflow()
+	}
+
 	return
 }
 

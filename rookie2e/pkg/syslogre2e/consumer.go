@@ -2,7 +2,6 @@ package syslogre2e
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/g41797/sputnik"
@@ -93,6 +92,7 @@ func (cons *consumer) run(bc sputnik.BlockCommunicator) {
 	cons.sender, _ = bc.Communicator(SyslogClientResponsibility)
 
 	defer close(cons.done)
+	defer cons.stopConsume()
 
 waitBroker:
 	for {
@@ -123,7 +123,6 @@ waitConsumer:
 
 	cons.runLoop()
 
-	cons.stopConsume()
 	return
 }
 
@@ -155,7 +154,7 @@ func (cons *consumer) startConsume() bool {
 		return false
 	}
 
-	mconsumer, err := st.CreateConsumer(SyslogConsumerResponsibility)
+	mconsumer, err := st.CreateConsumer(SyslogConsumerResponsibility, memphis.PullInterval(50*time.Millisecond), memphis.BatchSize(1000), memphis.BatchMaxWaitTime(time.Second))
 	if err != nil {
 		mc.Close()
 		return false
@@ -199,8 +198,6 @@ func (cons *consumer) processMessages(msgs []*memphis.Msg, err error, ctx contex
 	if err != nil {
 		return
 	}
-
-	fmt.Printf("Consumed %d messages \n", len(msgs))
 
 	for _, msg := range msgs {
 
