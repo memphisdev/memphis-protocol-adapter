@@ -21,62 +21,19 @@
 
   RFC3164 is oldest syslog RFC, syslog-adapter supports it for old syslogd clients.
 
-  RFC3164 message consists of following parts:
+  RFC3164 message consists of following symbolic parts:
   - priority
   - facility 
   - severity
   - timestamp
   - hostname
   - tag
-  - content
+  - **content**
 
-  Example: after send of RFC3164 log message with current time as *content* to syslog-adapter
-```bash
-  timestamp=$(date +%d-%m-%Y_%H-%M-%S)
-  logger  --rfc3164 --server 127.0.0.1 --port 5141 --priority user.alert  $timestamp
-```
-
-  it will be represented in JSON format on broker side as:
-```json
-{
-  "MsgHeaders": {
-    "client": [
-      ""
-    ],
-    "content": [
-      "23-08-2023_08-53-54"
-    ],
-    "facility": [
-      "1"
-    ],
-    "hostname": [
-      "BLKF"
-    ],
-    "priority": [
-      "9"
-    ],
-    "rfc": [
-      "RFC3164"
-    ],
-    "severity": [
-      "1"
-    ],
-    "tag": [
-      "g41797"
-    ],
-    "timestamp": [
-      "2023-08-23 08:53:54 +0000 UTC"
-    ],
-    "tls_peer": [
-      ""
-    ]
-  }
-}
-```
 
   ### RFC5424
 
-  RFC5424 message consists of following parts:
+  RFC5424 message consists of following symbolic parts:
  - priority
  - facility 
  - severity
@@ -87,7 +44,7 @@
  - proc_id
  - msg_id
  - structured_data
- - message
+ - **message**
 
   Example: after send of RFC5424 log message with current time as *message* to syslog-adapter
 ```bash
