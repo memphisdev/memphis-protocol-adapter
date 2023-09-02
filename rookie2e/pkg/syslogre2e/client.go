@@ -43,11 +43,13 @@ type client struct {
 	loggers []*srslog.Writer
 	bc      sputnik.BlockCommunicator
 
-	started    bool
-	currIndx   int
-	processed  *roaring.Bitmap
-	successN   int
-	recvN      int
+	started   bool
+	startTime time.Time
+	currIndx  int
+	processed *roaring.Bitmap
+	successN  int
+	recvN     int
+
 	startFlow  chan struct{}
 	stopFlow   chan struct{}
 	msgheaders chan map[string]string
@@ -169,7 +171,7 @@ func (cl *client) startflow() {
 	if cl.started {
 		return
 	}
-
+	cl.startTime = time.Now()
 	cl.started = true
 	cl.processed = roaring.New()
 	cl.sendNext()
@@ -250,7 +252,8 @@ func (cl *client) update(hdrs map[string]string) {
 
 func (cl *client) report() {
 	if cl.currIndx > 0 {
-		fmt.Printf("\n\n\t\tWas send %d messages. Successfully consumed %d Received %d\n\n", cl.currIndx, cl.successN, cl.recvN)
+		elp := time.Since(cl.startTime).String()
+		fmt.Printf("\n\n\t\t%s   Was send %d messages. Successfully consumed %d Received %d\n\n", elp, cl.currIndx, cl.successN, cl.recvN)
 	}
 	return
 }

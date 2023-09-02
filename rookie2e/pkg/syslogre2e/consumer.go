@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/g41797/sputnik"
+	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslogblocks"
 	"github.com/memphisdev/memphis.go"
 )
@@ -75,7 +76,12 @@ func (cons *consumer) finish(init bool) {
 }
 
 // OnServerConnect:
-func (cons *consumer) brokerConnected(_ sputnik.ServerConnection) {
+func (cons *consumer) brokerConnected(srvc sputnik.ServerConnection) {
+	lgrf, ok := srvc.(func() *adapter.Logger)
+	if ok {
+		lgrf().Noticef("Syslog tests started")
+	}
+
 	cons.conn <- struct{}{}
 	return
 }
@@ -153,6 +159,10 @@ func (cons *consumer) startConsume() bool {
 		mc.Close()
 		return false
 	}
+
+	st.Destroy()
+
+	st, _ = mc.CreateStation(cons.conf.STATION)
 
 	mconsumer, err := st.CreateConsumer(SyslogConsumerResponsibility, memphis.PullInterval(50*time.Millisecond), memphis.BatchSize(1000), memphis.BatchMaxWaitTime(time.Second))
 	if err != nil {
