@@ -155,11 +155,6 @@ type SyslogConfiguration struct {
 
 ### Command line
 
-```bash
- <process> -cf <path to folder with configuration files>
-```
-
-
 Example of running in vscode terminal
 ```bash
  ./syslog-adapter -cf ./cmd/syslog-adapter/conf/
@@ -167,7 +162,7 @@ Example of running in vscode terminal
 
 ### e2e tests
 
-Functionality:
+Functionality: asynchronously
 - send 1000000 syslog messages
 - consume messages 
 - compare 
@@ -185,7 +180,7 @@ Run tests:
 - syslog-re2e:
 ```bash
 # under vscode terminal
-./syslog-adapter -cf ./cmd/syslog-adapter/conf/
+./syslog-re2e -cf ./rookie2e/cmd/syslog-re2e/conf/
 ```
 
 
