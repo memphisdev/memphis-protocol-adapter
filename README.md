@@ -165,3 +165,27 @@ Example of running in vscode terminal
  ./syslog-adapter -cf ./cmd/syslog-adapter/conf/
 ```
 
+### e2e tests
+
+Functionality:
+- send 1000000 syslog messages
+- consume messages 
+- compare 
+- print report
+
+Build under vscode:
+```bash
+go clean -cache -testcache
+go build ./rookie2e/cmd/syslog-re2e/
+```
+Run tests:
+- Memphis DB
+- Memphis Broker
+- syslog-adapter
+- syslog-re2e:
+```bash
+# under vscode terminal
+./syslog-adapter -cf ./cmd/syslog-adapter/conf/
+```
+
+
