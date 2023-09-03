@@ -113,7 +113,7 @@ func (c *BrokerConnector) connect() error {
 	creds := c.conf.CONNECTION_TOKEN
 	username := c.conf.ROOT_USER
 	if c.conf.USER_PASS_BASED_AUTH {
-		username = "$memphis"
+		username = "$$memphis"
 		natsOpts.User = username
 		creds = c.conf.CONNECTION_TOKEN + "_" + c.conf.ROOT_PASSWORD
 		natsOpts.Password = creds
