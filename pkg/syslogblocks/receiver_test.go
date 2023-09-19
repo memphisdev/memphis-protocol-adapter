@@ -7,7 +7,6 @@ import (
 
 	"github.com/g41797/kissngoqueue"
 	"github.com/g41797/sputnik"
-	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 )
 
 // Satellite has 2 app. blocks:
@@ -41,7 +40,7 @@ type recvTest struct {
 func newRecvTest() *recvTest {
 	res := new(recvTest)
 	res.confFolderPath = "./_conf_test/"
-	res.cfact = adapter.ConfigFactory(res.confFolderPath)
+	res.cfact = sputnik.ConfigFactory(res.confFolderPath)
 	res.q = kissngoqueue.NewQueue[sputnik.Msg]()
 	res.conntr = sputnik.DummyConnector{}
 	res.to = time.Millisecond * 100

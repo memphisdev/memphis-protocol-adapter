@@ -5,9 +5,8 @@ go 1.19
 require (
 	github.com/RackSec/srslog v0.0.0-20180709174129-a4725f04ec91
 	github.com/RoaringBitmap/roaring v1.5.0
-	github.com/g41797/gonfig v1.0.1
 	github.com/g41797/kissngoqueue v0.1.5
-	github.com/g41797/sputnik v0.0.8
+	github.com/g41797/sputnik v0.0.9
 	github.com/memphisdev/memphis.go v1.1.1
 	github.com/nats-io/nats.go v1.28.0
 	gopkg.in/mcuadros/go-syslog.v2 v2.3.0
@@ -15,6 +14,7 @@ require (
 
 require (
 	github.com/bits-and-blooms/bitset v1.2.0 // indirect
+	github.com/g41797/gonfig v1.0.1 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
@@ -35,3 +35,5 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+// replace github.com/g41797/sputnik => ../../g41797/sputnik/

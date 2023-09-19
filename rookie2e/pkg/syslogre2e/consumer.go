@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/g41797/sputnik"
-	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslogblocks"
 	"github.com/memphisdev/memphis.go"
 )
@@ -77,7 +76,7 @@ func (cons *consumer) finish(init bool) {
 
 // OnServerConnect:
 func (cons *consumer) brokerConnected(srvc sputnik.ServerConnection) {
-	lgrf, ok := srvc.(func() *adapter.Logger)
+	lgrf, ok := srvc.(func() *sputnik.Logger)
 	if ok {
 		lgrf().Noticef("Syslog tests started")
 	}
@@ -133,12 +132,13 @@ waitConsumer:
 }
 
 func (cons *consumer) runLoop() {
+loop:
 	for {
 		select {
 		case <-cons.stop:
-			return
+			break loop
 		case <-cons.dscn:
-			return
+			break loop
 
 		}
 	}
