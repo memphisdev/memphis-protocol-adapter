@@ -58,9 +58,7 @@ func (rt *recvTest) factories() sputnik.BlockFactories {
 	finfct, _ := sputnik.Factory(sputnik.DefaultFinisherName)
 	confct, _ := sputnik.Factory(sputnik.DefaultConnectorName)
 
-	// Create producer block factory with mock msgproducer implementation
-	mpr := newMMP(rt.q)
-	pbfct := newPBF(mpr).createBlock
+	RegisterMessageProducerFactory(func() sputnik.MessageProducer { return newMMP(rt.q) })
 
 	factList := []struct {
 		name string
@@ -68,7 +66,7 @@ func (rt *recvTest) factories() sputnik.BlockFactories {
 	}{
 		{sputnik.DefaultFinisherName, finfct},
 		{sputnik.DefaultConnectorName, confct},
-		{ProducerName, pbfct},
+		{ProducerName, producerBlockFactory},
 		{ReceiverName, receiverBlockFactory},
 	}
 

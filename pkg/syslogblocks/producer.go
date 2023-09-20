@@ -4,25 +4,18 @@ import (
 	"github.com/g41797/sputnik"
 )
 
-type MsgProducer interface {
-	Connect(cf sputnik.ConfFactory) error
-	Produce(msg sputnik.Msg) error
-	Disconnect()
-}
-
-type producerBlockFactory struct {
-	mp *MsgProducer
-}
-
-func newPBF(mp MsgProducer) *producerBlockFactory {
-	result := new(producerBlockFactory)
-	result.mp = &mp
-	return result
-}
-
-func (pbf *producerBlockFactory) createBlock() *sputnik.Block {
+func producerBlockFactory() *sputnik.Block {
 	prd := new(producer)
-	prd.mp = *pbf.mp
+	if mpf == nil {
+		return nil
+	}
+
+	mp := mpf()
+	if mp == nil {
+		return nil
+	}
+
+	prd.mp = mp
 
 	block := sputnik.NewBlock(
 		sputnik.WithInit(prd.init),
@@ -40,11 +33,11 @@ func ProducerDescriptor() sputnik.BlockDescriptor {
 }
 
 func init() {
-	sputnik.RegisterBlockFactory(ProducerName, newPBF(newMsgProducer()).createBlock)
+	sputnik.RegisterBlockFactory(ProducerName, producerBlockFactory)
 }
 
 type producer struct {
-	mp        MsgProducer
+	mp        sputnik.MessageProducer
 	connected bool
 	conf      MsgPrdConfig
 	cfact     sputnik.ConfFactory
@@ -157,3 +150,9 @@ func (prd *producer) processLog(logmsg sputnik.Msg) {
 	}
 	return
 }
+
+func RegisterMessageProducerFactory(fact func() sputnik.MessageProducer) {
+	mpf = fact
+}
+
+var mpf func() sputnik.MessageProducer

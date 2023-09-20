@@ -7,13 +7,13 @@ import (
 	"github.com/g41797/sputnik"
 )
 
-var _ MsgProducer = &MockMsgProducer{}
+var _ sputnik.MessageProducer = &MockMsgProducer{}
 
 type MockMsgProducer struct {
 	q *kissngoqueue.Queue[sputnik.Msg]
 }
 
-func newMMP(q *kissngoqueue.Queue[sputnik.Msg]) MsgProducer {
+func newMMP(q *kissngoqueue.Queue[sputnik.Msg]) sputnik.MessageProducer {
 	res := MockMsgProducer{}
 	res.q = q
 	return &res

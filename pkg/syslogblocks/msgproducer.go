@@ -7,6 +7,10 @@ import (
 	"github.com/memphisdev/memphis.go"
 )
 
+func init() {
+	RegisterMessageProducerFactory(newMsgProducer)
+}
+
 const MsgProducerConfigName = ProducerName
 
 type MsgPrdConfig struct {
@@ -17,11 +21,11 @@ type MsgPrdConfig struct {
 	STATION       string
 }
 
-func newMsgProducer() MsgProducer {
+func newMsgProducer() sputnik.MessageProducer {
 	return &msgProducer{}
 }
 
-var _ MsgProducer = &msgProducer{}
+var _ sputnik.MessageProducer = &msgProducer{}
 
 type msgProducer struct {
 	conf     MsgPrdConfig
