@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/g41797/sputnik"
+	"github.com/g41797/sputnik/sidecar"
 	"github.com/memphisdev/memphis.go"
 )
 
@@ -21,11 +22,11 @@ type MsgPrdConfig struct {
 	STATION       string
 }
 
-func newMsgProducer() sputnik.MessageProducer {
+func newMsgProducer() sidecar.MessageProducer {
 	return &msgProducer{}
 }
 
-var _ sputnik.MessageProducer = &msgProducer{}
+var _ sidecar.MessageProducer = &msgProducer{}
 
 type msgProducer struct {
 	conf     MsgPrdConfig

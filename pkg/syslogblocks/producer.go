@@ -2,6 +2,7 @@ package syslogblocks
 
 import (
 	"github.com/g41797/sputnik"
+	"github.com/g41797/sputnik/sidecar"
 )
 
 func producerBlockFactory() *sputnik.Block {
@@ -37,7 +38,7 @@ func init() {
 }
 
 type producer struct {
-	mp        sputnik.MessageProducer
+	mp        sidecar.MessageProducer
 	connected bool
 	conf      MsgPrdConfig
 	cfact     sputnik.ConfFactory
@@ -151,8 +152,8 @@ func (prd *producer) processLog(logmsg sputnik.Msg) {
 	return
 }
 
-func RegisterMessageProducerFactory(fact func() sputnik.MessageProducer) {
+func RegisterMessageProducerFactory(fact func() sidecar.MessageProducer) {
 	mpf = fact
 }
 
-var mpf func() sputnik.MessageProducer
+var mpf func() sidecar.MessageProducer

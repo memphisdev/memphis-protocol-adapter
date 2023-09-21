@@ -21,7 +21,6 @@ const (
 	syslogsInfoSubject = "extern.info"
 	syslogsWarnSubject = "extern.warn"
 	syslogsErrSubject  = "extern.err"
-	labelLen           = 3
 )
 
 type BrokerConnConfig struct {
@@ -41,7 +40,7 @@ type BrokerConnConfig struct {
 
 var _ sputnik.ServerConnector = &BrokerConnector{}
 var _ io.Writer = &BrokerConnector{}
-var _ sputnik.LoggerFactory = new(BrokerConnector).getLogger
+var _ LoggerFactory = new(BrokerConnector).getLogger
 
 const connectorConfName = "connector"
 
@@ -49,7 +48,7 @@ type BrokerConnector struct {
 	io.Writer
 	conf       BrokerConnConfig
 	nc         *nats.Conn
-	l          atomic.Pointer[sputnik.Logger]
+	l          atomic.Pointer[Logger]
 	flags      int
 	pidPrefix  string
 	labelStart int
@@ -175,7 +174,7 @@ func (c *BrokerConnector) Disconnect() {
 	return
 }
 
-func (c *BrokerConnector) getLogger() *sputnik.Logger {
+func (c *BrokerConnector) getLogger() *Logger {
 	if c == nil {
 		return nil
 	}
@@ -194,7 +193,7 @@ func (c *BrokerConnector) createLogger() {
 		"ERR": syslogsErrSubject,
 	}
 
-	c.l.Store(sputnik.NewLogger(log.New(c, c.pidPrefix, c.flags)))
+	c.l.Store(NewLogger(log.New(c, c.pidPrefix, c.flags)))
 
 	return
 }

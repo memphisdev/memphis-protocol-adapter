@@ -5,15 +5,16 @@ import (
 
 	"github.com/g41797/kissngoqueue"
 	"github.com/g41797/sputnik"
+	"github.com/g41797/sputnik/sidecar"
 )
 
-var _ sputnik.MessageProducer = &MockMsgProducer{}
+var _ sidecar.MessageProducer = &MockMsgProducer{}
 
 type MockMsgProducer struct {
 	q *kissngoqueue.Queue[sputnik.Msg]
 }
 
-func newMMP(q *kissngoqueue.Queue[sputnik.Msg]) sputnik.MessageProducer {
+func newMMP(q *kissngoqueue.Queue[sputnik.Msg]) sidecar.MessageProducer {
 	res := MockMsgProducer{}
 	res.q = q
 	return &res

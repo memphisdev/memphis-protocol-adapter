@@ -7,6 +7,7 @@ import (
 
 	"github.com/g41797/kissngoqueue"
 	"github.com/g41797/sputnik"
+	"github.com/g41797/sputnik/sidecar"
 )
 
 // Satellite has 2 app. blocks:
@@ -40,7 +41,7 @@ type recvTest struct {
 func newRecvTest() *recvTest {
 	res := new(recvTest)
 	res.confFolderPath = "./_conf_test/"
-	res.cfact = sputnik.ConfigFactory(res.confFolderPath)
+	res.cfact = sidecar.ConfigFactory(res.confFolderPath)
 	res.q = kissngoqueue.NewQueue[sputnik.Msg]()
 	res.conntr = sputnik.DummyConnector{}
 	res.to = time.Millisecond * 100
@@ -58,7 +59,7 @@ func (rt *recvTest) factories() sputnik.BlockFactories {
 	finfct, _ := sputnik.Factory(sputnik.DefaultFinisherName)
 	confct, _ := sputnik.Factory(sputnik.DefaultConnectorName)
 
-	RegisterMessageProducerFactory(func() sputnik.MessageProducer { return newMMP(rt.q) })
+	RegisterMessageProducerFactory(func() sidecar.MessageProducer { return newMMP(rt.q) })
 
 	factList := []struct {
 		name string
