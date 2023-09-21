@@ -9,7 +9,7 @@ import (
 	"github.com/RackSec/srslog"
 	"github.com/RoaringBitmap/roaring"
 	"github.com/g41797/sputnik"
-	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslogblocks"
+	"github.com/g41797/syslogsidecar"
 )
 
 const (
@@ -39,7 +39,7 @@ func syslogClientBlockFactory() *sputnik.Block {
 const MAX_LOG_MESSAGES = 1000000
 
 type client struct {
-	conf    syslogblocks.SyslogConfiguration
+	conf    syslogsidecar.SyslogConfiguration
 	loggers []*srslog.Writer
 	bc      sputnik.BlockCommunicator
 
@@ -61,7 +61,7 @@ type client struct {
 
 // Init
 func (cl *client) init(fact sputnik.ConfFactory) error {
-	if err := fact(syslogblocks.ReceiverName, &cl.conf); err != nil {
+	if err := fact(syslogsidecar.ReceiverName, &cl.conf); err != nil {
 		return err
 	}
 
@@ -208,14 +208,14 @@ func (cl *client) update(hdrs map[string]string) {
 	}
 	cl.recvN++
 
-	rfc, ok := hdrs[syslogblocks.RFCFormatKey]
+	rfc, ok := hdrs[syslogsidecar.RFCFormatKey]
 	if !ok {
 		return
 	}
 
 	valName := "message"
 
-	if rfc == syslogblocks.RFC3164 {
+	if rfc == syslogsidecar.RFC3164 {
 		valName = "content"
 	}
 
@@ -283,7 +283,7 @@ func (cl *client) closeLoggers() {
 	}
 }
 
-func NewLogWriter(cnf syslogblocks.SyslogConfiguration, rfcForm srslog.Formatter) (*srslog.Writer, error) {
+func NewLogWriter(cnf syslogsidecar.SyslogConfiguration, rfcForm srslog.Formatter) (*srslog.Writer, error) {
 	w, err := srslog.Dial("tcp", cnf.ADDRTCP, srslog.LOG_ALERT, "re2e")
 	if err != nil {
 		return nil, err

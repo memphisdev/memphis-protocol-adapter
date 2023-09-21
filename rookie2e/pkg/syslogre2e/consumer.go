@@ -6,7 +6,7 @@ import (
 
 	"github.com/g41797/sputnik"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
-	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslogblocks"
+	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslog"
 	"github.com/memphisdev/memphis.go"
 )
 
@@ -36,7 +36,7 @@ func syslogConsumerBlockFactory() *sputnik.Block {
 }
 
 type consumer struct {
-	conf    syslogblocks.MsgPrdConfig
+	conf    syslog.MsgPrdConfig
 	sender  sputnik.BlockCommunicator
 	started bool
 	mconn   *memphis.Conn
@@ -51,7 +51,7 @@ type consumer struct {
 
 // Init
 func (cons *consumer) init(fact sputnik.ConfFactory) error {
-	if err := fact(syslogblocks.MsgProducerConfigName, &cons.conf); err != nil {
+	if err := fact(syslog.MsgProducerConfigName, &cons.conf); err != nil {
 		return err
 	}
 

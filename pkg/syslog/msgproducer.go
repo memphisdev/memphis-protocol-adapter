@@ -1,18 +1,19 @@
-package syslogblocks
+package syslog
 
 import (
 	"fmt"
 
 	"github.com/g41797/sputnik"
 	"github.com/g41797/sputnik/sidecar"
+	"github.com/g41797/syslogsidecar"
 	"github.com/memphisdev/memphis.go"
 )
 
 func init() {
-	RegisterMessageProducerFactory(newMsgProducer)
+	syslogsidecar.RegisterMessageProducerFactory(newMsgProducer)
 }
 
-const MsgProducerConfigName = ProducerName
+const MsgProducerConfigName = syslogsidecar.ProducerName
 
 type MsgPrdConfig struct {
 	MEMPHIS_HOST  string

@@ -13,6 +13,8 @@ github.com/g41797/kissngoqueue v0.1.5 h1:UrnpxbjOnTnKj/EqpbLA9LjhYkHjnLWMZQqsz3A
 github.com/g41797/kissngoqueue v0.1.5/go.mod h1:c1mGfrNWfEP2cHeX04Iji8qYGQevvUmZw5SPZM5M9Cs=
 github.com/g41797/sputnik v0.0.11 h1:LQ/hIJaKV+xFgv6NWH3QlT1qxtkV3sFUSu2GoVm0l7c=
 github.com/g41797/sputnik v0.0.11/go.mod h1:nhuXjBz9tK1Myi+LVaTpLodWdMuquayrdcgJO6O+5dA=
+github.com/g41797/syslogsidecar v0.0.3 h1:jOo+isUcifoVvRK9F/SigiWgcVGZcJcN7P4Glkk5n5I=
+github.com/g41797/syslogsidecar v0.0.3/go.mod h1:w9qh8f2aw4JRf5wvt3i1lR6wIVAUH4TZHK+OLkk5cmI=
 github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=

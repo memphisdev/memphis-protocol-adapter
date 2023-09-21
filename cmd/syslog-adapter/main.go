@@ -5,7 +5,7 @@ import (
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 
 	// Attach blocks packages to the process:
-	_ "github.com/memphisdev/memphis-protocol-adapter/pkg/syslogblocks"
+	_ "github.com/g41797/syslogsidecar"
 )
 
 func main() {
