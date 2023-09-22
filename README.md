@@ -6,6 +6,8 @@
 
 ## syslog-adapter
 
+syslog-adapter is based on [syslogsidecar framework](https://github.com/g41797/syslogsidecar#readme)
+
 ### Command line
 
 Example of running in vscode terminal
