@@ -1,9 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"github.com/g41797/sputnik/sidecar"
+	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
+
+	// Attach blocks packages to the process:
+	_ "github.com/g41797/syslogsidecar"
 )
 
 func main() {
-	fmt.Printf("Hello all adapters!!!")
+	sidecar.Start(new(adapter.BrokerConnector))
 }

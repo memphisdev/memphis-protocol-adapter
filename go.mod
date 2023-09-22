@@ -5,8 +5,8 @@ go 1.19
 require (
 	github.com/RackSec/srslog v0.0.0-20180709174129-a4725f04ec91
 	github.com/RoaringBitmap/roaring v1.5.0
-	github.com/g41797/sputnik v0.0.11
-	github.com/g41797/syslogsidecar v0.0.3
+	github.com/g41797/sputnik v0.0.12
+	github.com/g41797/syslogsidecar v0.0.4
 	github.com/memphisdev/memphis.go v1.1.1
 	github.com/nats-io/nats.go v1.28.0
 )
@@ -37,7 +37,6 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-//replace github.com/g41797/sputnik => ../../g41797/sputnik/
-//replace github.com/g41797/sputnik/sidecar => ../../g41797/sputnik/sidecar
-
-//replace github.com/g41797/syslogsidecar => ../../g41797/syslogsidecar
+// replace github.com/g41797/sputnik => ../../g41797/sputnik/
+// replace github.com/g41797/sputnik/sidecar => ../../g41797/sputnik/sidecar
+// replace github.com/g41797/syslogsidecar => ../../g41797/syslogsidecar

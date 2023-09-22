@@ -35,7 +35,7 @@ type msgProducer struct {
 	producer *memphis.Producer
 }
 
-func (mpr *msgProducer) Connect(cf sputnik.ConfFactory) error {
+func (mpr *msgProducer) Connect(cf sputnik.ConfFactory, _ sputnik.ServerConnection) error {
 	err := cf(MsgProducerConfigName, &mpr.conf)
 	if err != nil {
 		return err
