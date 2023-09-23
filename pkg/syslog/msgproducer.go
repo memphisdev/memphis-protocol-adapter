@@ -27,8 +27,6 @@ func newMsgProducer() sidecar.MessageProducer {
 	return &msgProducer{}
 }
 
-var _ sidecar.MessageProducer = &msgProducer{}
-
 type msgProducer struct {
 	conf     MsgPrdConfig
 	mc       *memphis.Conn
