@@ -62,6 +62,8 @@ func (mpr *msgProducer) Disconnect() {
 		return
 	}
 
+	mpr.producer.Destroy()
+	mpr.producer = nil
 	mpr.mc.Close()
 	mpr.mc = nil
 	return

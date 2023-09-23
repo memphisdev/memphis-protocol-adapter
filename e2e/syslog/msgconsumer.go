@@ -62,14 +62,21 @@ func (cons *msgConsumer) Consume(sender sputnik.BlockCommunicator) error {
 }
 
 func (cons *msgConsumer) Disconnect() {
+	if cons == nil {
+		return
+	}
+
 	if !cons.started {
 		return
 	}
 	if cons.mcons != nil {
 		cons.mcons.StopConsume()
 		cons.mconn.Close()
+		cons.mcons = nil
+		cons.mconn = nil
 	}
 	cons.stopTest()
+	cons.started = false
 	return
 }
 

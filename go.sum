@@ -13,8 +13,8 @@ github.com/g41797/kissngoqueue v0.1.5 h1:UrnpxbjOnTnKj/EqpbLA9LjhYkHjnLWMZQqsz3A
 github.com/g41797/kissngoqueue v0.1.5/go.mod h1:c1mGfrNWfEP2cHeX04Iji8qYGQevvUmZw5SPZM5M9Cs=
 github.com/g41797/sputnik v0.0.13 h1:vjZyADWl8jPxv4XsHSHsyaca4BhRo/dSVHd5LrVIB6o=
 github.com/g41797/sputnik v0.0.13/go.mod h1:nhuXjBz9tK1Myi+LVaTpLodWdMuquayrdcgJO6O+5dA=
-github.com/g41797/syslogsidecar v0.0.5 h1:EhuyBE2kvjAPnq3GltadEYaXb0Bg3WbwZMpt/JQSRM0=
-github.com/g41797/syslogsidecar v0.0.5/go.mod h1:0ZTZ7XU9nXKdpsWyfWDs4eUyHIMex9r37HL8N3jUfJU=
+github.com/g41797/syslogsidecar v0.0.6 h1:Sq3rgPzvq5OLfMV7fjpx7yMME7NmWYoE4GkoTHWZiW0=
+github.com/g41797/syslogsidecar v0.0.6/go.mod h1:PwKNnAF2rdYQUjmnQEPujQ+3pUyZ7xS5Ui08w45QYGM=
 github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
