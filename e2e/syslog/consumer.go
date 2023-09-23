@@ -1,10 +1,11 @@
-package syslogre2e
+package sysloge2e
 
 import (
 	"context"
 	"time"
 
 	"github.com/g41797/sputnik"
+	"github.com/g41797/syslogsidecar/e2e"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslog"
 	"github.com/memphisdev/memphis.go"
@@ -16,7 +17,7 @@ const (
 )
 
 func SyslogConsumerDescriptor() sputnik.BlockDescriptor {
-	return sputnik.BlockDescriptor{Name: SyslogClientName, Responsibility: SyslogClientResponsibility}
+	return sputnik.BlockDescriptor{Name: e2e.SyslogClientName, Responsibility: e2e.SyslogClientResponsibility}
 }
 
 func init() {
@@ -95,7 +96,7 @@ func (cons *consumer) brokerDisconnected() {
 // Run
 func (cons *consumer) run(bc sputnik.BlockCommunicator) {
 
-	cons.sender, _ = bc.Communicator(SyslogClientResponsibility)
+	cons.sender, _ = bc.Communicator(e2e.SyslogClientResponsibility)
 
 	defer close(cons.done)
 	defer cons.stopConsume()
