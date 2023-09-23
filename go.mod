@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/g41797/sputnik v0.0.13
-	github.com/g41797/syslogsidecar v0.0.6
+	github.com/g41797/syslogsidecar v0.0.7
 	github.com/memphisdev/memphis.go v1.1.1
 	github.com/nats-io/nats.go v1.28.0
 )

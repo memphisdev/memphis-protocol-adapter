@@ -6,14 +6,14 @@ import (
 
 	"github.com/g41797/sputnik"
 	"github.com/g41797/sputnik/sidecar"
-	sysloge2e "github.com/g41797/syslogsidecar/e2e"
+	"github.com/g41797/syslogsidecar/e2e"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslog"
 	"github.com/memphisdev/memphis.go"
 )
 
 func init() {
-	sysloge2e.RegisterMessageConsumerFactory(newMsgConsumer)
+	e2e.RegisterMessageConsumerFactory(newMsgConsumer)
 }
 
 const MsgConsumerConfigName = syslog.MsgProducerConfigName
@@ -28,7 +28,7 @@ type msgConsumer struct {
 }
 
 func newMsgConsumer() sidecar.MessageConsumer {
-	return &msgConsumer{}
+	return new(msgConsumer)
 }
 
 func (mcn *msgConsumer) Connect(cf sputnik.ConfFactory, shared sputnik.ServerConnection) error {
@@ -98,7 +98,7 @@ func (cons *msgConsumer) prepare() error {
 
 	st, _ = mc.CreateStation(cons.conf.STATION)
 
-	mconsumer, err := st.CreateConsumer(sysloge2e.SyslogConsumerResponsibility, memphis.PullInterval(50*time.Millisecond), memphis.BatchSize(1000), memphis.BatchMaxWaitTime(time.Second))
+	mconsumer, err := st.CreateConsumer(e2e.SyslogConsumerResponsibility, memphis.PullInterval(50*time.Millisecond), memphis.BatchSize(1000), memphis.BatchMaxWaitTime(time.Second))
 	if err != nil {
 		mc.Close()
 		return err
