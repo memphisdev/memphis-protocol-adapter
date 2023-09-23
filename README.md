@@ -28,16 +28,14 @@ Functionality: asynchronously
 Build under vscode:
 ```bash
 go clean -cache -testcache
-go build ./rookie2e/cmd/syslog-re2e/
+go build ./cmd/syslog-e2e/
 ```
-Run tests:
-- Memphis DB
-- Memphis Broker
-- syslog-adapter
-- syslog-re2e:
+Run e2e tests:
+- start Memphis DB
+- start Memphis Broker
 ```bash
 # under vscode terminal
-./syslog-re2e -cf ./rookie2e/cmd/syslog-re2e/conf/
+./syslog-e2e -cf ./cmd/syslog-e2e/conf/
 ```
 
 
