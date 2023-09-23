@@ -1,0 +1,7 @@
+{
+    "MEMPHIS_HOST": "127.0.0.1",
+    "MEMPHIS_USER": "root",
+    "MEMPHIS_PSWRD": "memphis",
+    "PRODUCER": "syslog-adapter",
+    "STATION": "syslog"
+}

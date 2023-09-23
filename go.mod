@@ -38,5 +38,4 @@ require (
 )
 
 // replace github.com/g41797/sputnik => ../../g41797/sputnik/
-// replace github.com/g41797/sputnik/sidecar => ../../g41797/sputnik/sidecar
 // replace github.com/g41797/syslogsidecar => ../../g41797/syslogsidecar
