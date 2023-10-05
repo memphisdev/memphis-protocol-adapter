@@ -6,12 +6,10 @@ toolchain go1.21.1
 
 require (
 	github.com/g41797/sputnik v0.0.16
-	github.com/g41797/syslogsidecar v0.0.8
+	github.com/g41797/syslogsidecar v0.0.9
 	github.com/memphisdev/memphis.go v1.1.1
 	github.com/nats-io/nats.go v1.28.0
 )
-
-replace github.com/g41797/syslogsidecar => ../../g41797/syslogsidecar
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
