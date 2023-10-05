@@ -32,6 +32,6 @@ go.work
 # 'exe' files
 **/protocol-adapter
 **/syslog-adapter
-**/syslog-re2e
+**/syslog-e2e
 
 

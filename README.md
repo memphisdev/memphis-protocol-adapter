@@ -20,22 +20,17 @@ Example of running in vscode terminal
 ### e2e tests
 
 Functionality: asynchronously
-- send 1000000 syslog messages
+- send 1000000 syslog messages via one TCP/IP connection to syslogsidecar
+- receive messages and forward to the broker
 - consume messages 
 - compare 
 - print report
 
-Build under vscode:
+Build and run under vscode:
 ```bash
 go clean -cache -testcache
 go build ./cmd/syslog-e2e/
-```
-Run e2e tests:
-- start Memphis DB
-- start Memphis Broker
-```bash
-# under vscode terminal
 ./syslog-e2e -cf ./cmd/syslog-e2e/conf/
 ```
-
+Required memphis services will be started automatically according to *conf/docker-compose.yml* file
 
