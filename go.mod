@@ -6,7 +6,8 @@ toolchain go1.21.1
 
 require (
 	github.com/g41797/sputnik v0.0.16
-	github.com/g41797/syslogsidecar v0.0.9
+	github.com/g41797/starter v0.0.1
+	github.com/g41797/syslogsidecar v0.0.10
 	github.com/memphisdev/memphis.go v1.1.1
 	github.com/nats-io/nats.go v1.28.0
 )
