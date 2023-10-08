@@ -5,17 +5,16 @@ import (
 
 	// sputnik framework:
 	"github.com/g41797/sputnik/sidecar"
-	"github.com/g41797/starter"
 
 	// memphis connector plugin
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 
 	// Attach blocks and plugins to the process via blank imports:
-
+	//
 	// 		syslog-adapter:
 	// 			syslogsidecar blocks: receiver|producer|client|consumer
 	_ "github.com/g41797/syslogsidecar"
-
+	//
 	// 			memphis syslog plugins
 	// 				msgconsumer
 	_ "github.com/memphisdev/memphis-protocol-adapter/e2e/syslog"
@@ -25,7 +24,7 @@ import (
 
 func main() {
 
-	stop, err := starter.StartServices()
+	stop, err := sidecar.StartServices()
 
 	if err != nil {
 		fmt.Println(err)
