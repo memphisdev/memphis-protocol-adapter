@@ -2,6 +2,7 @@ package syslog
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/g41797/sputnik"
 	"github.com/g41797/sputnik/sidecar"
@@ -16,11 +17,13 @@ func init() {
 const MsgProducerConfigName = syslogsidecar.ProducerName
 
 type MsgPrdConfig struct {
-	MEMPHIS_HOST  string
-	MEMPHIS_USER  string
-	MEMPHIS_PSWRD string
-	PRODUCER      string
-	STATION       string
+	MEMPHIS_HOST   string
+	MEMPHIS_USER   string
+	MEMPHIS_PSWRD  string
+	PRODUCER       string
+	STATION        string
+	RETENTIONTYPE  string
+	RETENTIONVALUE int
 }
 
 func newMsgProducer() sidecar.MessageProducer {
@@ -46,6 +49,12 @@ func (mpr *msgProducer) Connect(cf sputnik.ConfFactory, _ sputnik.ServerConnecti
 		return err
 	}
 
+	_, err = CreateStation(mpr.mc, &mpr.conf)
+	if err != nil {
+		mpr.Disconnect()
+		return err
+	}
+
 	p, err := mpr.mc.CreateProducer(mpr.conf.STATION, mpr.conf.PRODUCER)
 
 	if err != nil {
@@ -62,8 +71,11 @@ func (mpr *msgProducer) Disconnect() {
 		return
 	}
 
-	mpr.producer.Destroy()
-	mpr.producer = nil
+	if mpr.producer != nil {
+		mpr.producer.Destroy()
+		mpr.producer = nil
+	}
+
 	mpr.mc.Close()
 	mpr.mc = nil
 	return
@@ -94,4 +106,36 @@ func (mpr *msgProducer) Produce(msg sputnik.Msg) error {
 	err := mpr.producer.Produce("", memphis.MsgHeaders(hdrs))
 
 	return err
+}
+
+func CreateStation(mc *memphis.Conn, conf *MsgPrdConfig) (*memphis.Station, error) {
+	rt, rv := retentionParams(conf)
+	st, err := mc.CreateStation(conf.STATION, memphis.RetentionTypeOpt(rt), memphis.RetentionVal(rv))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return st, nil
+}
+
+var retentiontypes = []string{"MaxMessageAgeSeconds", "Messages", "Bytes", "AckBased"}
+
+func retentionParams(conf *MsgPrdConfig) (rt memphis.RetentionType, rv int) {
+	defaultOpts := memphis.GetStationDefaultOptions()
+
+	rt = defaultOpts.RetentionType
+	rv = conf.RETENTIONVALUE
+	if rv == 0 {
+		rv = defaultOpts.RetentionVal
+	}
+
+	for i, val := range retentiontypes {
+		if strings.ToUpper(val) == strings.ToUpper(conf.RETENTIONTYPE) {
+			rt = memphis.RetentionType(i)
+			return rt, rv
+		}
+	}
+
+	return rt, rv
 }

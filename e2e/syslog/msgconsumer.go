@@ -88,7 +88,7 @@ func (cons *msgConsumer) prepare() error {
 		return err
 	}
 
-	st, err := mc.CreateStation(cons.conf.STATION)
+	st, err := syslog.CreateStation(mc, &cons.conf)
 	if err != nil {
 		mc.Close()
 		return err
@@ -96,7 +96,7 @@ func (cons *msgConsumer) prepare() error {
 
 	st.Destroy()
 
-	st, _ = mc.CreateStation(cons.conf.STATION)
+	st, _ = syslog.CreateStation(mc, &cons.conf)
 
 	mconsumer, err := st.CreateConsumer(e2e.SyslogConsumerResponsibility, memphis.PullInterval(50*time.Millisecond), memphis.BatchSize(1000), memphis.BatchMaxWaitTime(time.Second))
 	if err != nil {

@@ -3,5 +3,7 @@
     "MEMPHIS_USER": "root",
     "MEMPHIS_PSWRD": "memphis",
     "PRODUCER": "syslog-adapter",
-    "STATION": "syslog"
+    "STATION": "syslog",
+    "RETENTIONTYPE":"MaxMessageAgeSeconds",
+    "RETENTIONVALUE":604800
 }
