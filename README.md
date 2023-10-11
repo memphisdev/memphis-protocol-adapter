@@ -14,7 +14,8 @@ syslog-adapter is based on [syslogsidecar framework](https://github.com/g41797/s
 
 Example of running in vscode terminal
 ```bash
- ./syslog-adapter -cf ./cmd/syslog-adapter/conf/
+ ./syslog-adapter -cf ./cmd/syslog-adapter/conf/ &
+ bash ./_integration/sendtosyslog.sh
 ```
 
 ### e2e tests

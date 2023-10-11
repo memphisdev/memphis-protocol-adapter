@@ -5,5 +5,5 @@
     "PRODUCER": "syslog-adapter",
     "STATION": "syslog",
     "RETENTIONTYPE":"MaxMessageAgeSeconds",
-    "RETENTIONVALUE":86400
+    "RETENTIONVALUE":600
 }
