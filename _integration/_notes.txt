@@ -1,0 +1,15 @@
+
+
+docker build -t g41797/memphis-protocol-adapter .
+docker login
+..........
+..........
+docker push g41797/memphis-protocol-adapter:latest
+
+docker compose -f ./_integration/docker-compose.yml up
+
+sudo netstat --tcp --udp --listening --programs --numeric|grep 5141
+
+bash ./_integration/sendtosyslog.sh
+
+
