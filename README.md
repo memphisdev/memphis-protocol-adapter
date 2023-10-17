@@ -8,11 +8,10 @@
   
   It is based on [syslogsidecar framework](https://github.com/g41797/syslogsidecar#readme).
 
-  Implementation for memphis consists of 3 plugins:
+   In order to supply memphis specific functionality, 3 plugins to syslogsidecar were developed:
   - connector
   - producer
   - consumer (used for the tests)
-
 
 ## Connector
 
