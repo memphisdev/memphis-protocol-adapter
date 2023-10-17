@@ -4,34 +4,75 @@
 
   This project is developing in accordance with [#849](https://github.com/memphisdev/memphis/issues/849)
 
-  First developed adapter is **syslog-adapter**
+  First developed adapter is **syslog-adapter**. 
+  
+  It is based on [syslogsidecar framework](https://github.com/g41797/syslogsidecar#readme).
 
-## syslog-adapter
+  Implementation for memphis consists of 3 plugins:
+  - connector
+  - producer
+  - consumer (used for the tests)
 
-syslog-adapter is based on [syslogsidecar framework](https://github.com/g41797/syslogsidecar#readme)
 
-### Command line
+## Connector
 
-Example of running in vscode terminal
-```bash
- ./syslog-adapter -cf ./cmd/syslog-adapter/conf/ &
- bash ./_integration/sendtosyslog.sh
+Configuration file: connector.json
+```json
+{
+    "MEMPHIS_ADDR": "localhost:6666",
+    "MEMPHIS_CLIENT":"MEMPHIS HTTP LOGGER",
+    "USER_PASS_BASED_AUTH": true,
+    "ROOT_USER": "root",
+    "ROOT_PASSWORD": "memphis",
+    "CONNECTION_TOKEN": "memphis",
+    "CLIENT_CERT_PATH": "",
+    "CLIENT_KEY_PATH ": "",
+    "ROOT_CA_PATH": "",
+    "CLOUD_ENV": false,
+    "DEBUG": true,
+    "DEV_ENV": true
+}
 ```
 
-### e2e tests
-
-Functionality: asynchronously
-- send 1000000 syslog messages via one TCP/IP connection to syslogsidecar
-- receive messages and forward to the broker
-- consume messages 
-- compare 
-- print report
-
-Build and run under vscode:
-```bash
-go clean -cache -testcache
-go build ./cmd/syslog-e2e/
-./syslog-e2e -cf ./cmd/syslog-e2e/conf/
+Part of configuration is placed within docker-compose.yml:
+```yml
+    environment:
+          - MEMPHIS_ADDR=memphis:6666
 ```
-Required memphis services will be started automatically according to *conf/docker-compose.yml* file
+
+Connector creates sharable _*nats.Conn*_ for:
+- periodic validation of connectivity with memphis
+- loggers
+
+
+
+## Producer
+
+Configuration file: syslogproducer.json
+```json
+{
+    "MEMPHIS_HOST": "127.0.0.1",
+    "MEMPHIS_USER": "root",
+    "MEMPHIS_PSWRD": "memphis",
+    "PRODUCER": "syslog-adapter",
+    "STATION": "syslog",
+    "RETENTIONTYPE":"MaxMessageAgeSeconds",
+    "RETENTIONVALUE":600
+}
+```
+
+Part of configuration is placed within docker-compose.yml:
+```yml
+    environment:
+          - MEMPHIS_HOST=memphis
+```
+
+Producer uses dedicated _*memphis.Conn*_.
+
+syslog messages are produced to memphis as *MsgHeaders* with empty payload:
+```go
+err := mpr.producer.Produce("", memphis.MsgHeaders(hdrs))
+```
+
+
 
