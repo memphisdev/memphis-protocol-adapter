@@ -100,6 +100,7 @@ all messages with severity above 4 will be discarded.
 ### Links
 
 - More complete description of [syslogsidecar](https://github.com/g41797/syslogsidecar#readme)
+- [How to configure the Docker daemon to send the logs to syslog](https://docs.docker.com/config/containers/logging/syslog/)
 
 
 ## Memphis Plugins
