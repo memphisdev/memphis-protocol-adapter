@@ -6,14 +6,105 @@
 
   First developed adapter is **syslog-adapter**. 
   
-  It is based on [syslogsidecar framework](https://github.com/g41797/syslogsidecar#readme).
 
-   In order to supply memphis specific functionality, 3 plugins to syslogsidecar were developed:
-  - connector
-  - producer
-  - consumer (used for the tests)
+syslog-adapter is based on 
+- [syslogsidecar](https://github.com/g41797/syslogsidecar#readme)
+- [sputnik](https://github.com/g41797/sputnik)
 
-## Connector
+syslog-adapter consists of:
+- syslog server - common part for all syslogsidecar based processes
+- memphis specific plugins 
+
+## Syslog server
+
+ Supported RFCs:
+  - [RFC3164](<https://tools.ietf.org/html/rfc3164>)
+  - [RFC5424](<https://tools.ietf.org/html/rfc5424>)
+
+
+  RFC3164 message consists of following symbolic parts:
+  - priority
+  - facility 
+  - severity
+  - timestamp
+  - hostname
+  - tag
+  - **content**
+
+  ### RFC5424
+
+  RFC5424 message consists of following symbolic parts:
+ - priority
+ - facility 
+ - severity
+ - timestamp
+ - hostname
+ - version
+ - app_name
+ - proc_id
+ - msg_id
+ - structured_data
+ - **message**
+
+  ### Non-RFC parts
+
+  syslogsidecar adds following parts to standard ones:
+  - rfc of produced message:
+    - Part name: "rfc"
+    - Values: "RFC3164"|"RFC5424"
+  - former syslog message:
+    - Part name: "data"
+  - parsing error (optional):
+    - Part name: "parsererror"
+
+      
+### Severities
+
+    Valid severity levels and names are:
+
+ - 0 emerg
+ - 1 alert
+ - 2 crit
+ - 3 err
+ - 4 warning
+ - 5 notice
+ - 6 info
+ - 7 debug
+
+  syslogsidecar filters messages by level according to value in configuration, e.g. for:
+```json
+{
+  "SEVERITYLEVEL": 4,
+  ...........
+}
+```
+all messages with severity above 4 will be discarded. 
+
+
+  ### Configuration
+
+  Configuration of syslog server part of syslogsidecar is saved in the file syslogreceiver.json:
+```json
+{
+    "SEVERITYLEVEL": 4,
+    "ADDRTCP": "127.0.0.1:5141",
+    "ADDRUDP": "127.0.0.1:5141",
+    "UDSPATH": "",
+    "ADDRTCPTLS": "127.0.0.1:5143",
+    "CLIENT_CERT_PATH": "",
+    "CLIENT_KEY_PATH ": "",
+    "ROOT_CA_PATH": ""
+}
+```
+
+### Links
+
+- More complete description of [syslogsidecar](https://github.com/g41797/syslogsidecar#readme)
+
+
+## Memphis Plugins
+
+### Connector
 
 Configuration file: connector.json
 ```json
@@ -45,7 +136,7 @@ Connector creates sharable _*nats.Conn*_ for:
 
 
 
-## Producer
+### Producer
 
 Configuration file: syslogproducer.json
 ```json
