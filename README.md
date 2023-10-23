@@ -46,22 +46,21 @@ syslog-adapter consists of:
  - structured_data
  - **message**
 
-  ### Non-RFC parts
+ ### Non-RFC parts
 
-  syslogsidecar adds following parts to standard ones:
-  - rfc of produced message:
-    - Part name: "rfc"
-    - Values: "RFC3164"|"RFC5424"
-  - former syslog message:
-    - Part name: "data"
-  - parsing error (optional):
-    - Part name: "parsererror"
+  syslogsidecar adds rfc of produced message:
+  - Part name: "rfc"
+  - Values: "RFC3164"|"RFC5424"
 
+### Badly formatted messages
+
+  syslogsidecar creates only one part for badly formatted message - former syslog message:
+  - Part name: "data"
+      
       
 ### Severities
 
-    Valid severity levels and names are:
-
+  Valid severity levels and names are:
  - 0 emerg
  - 1 alert
  - 2 crit
@@ -100,7 +99,6 @@ all messages with severity above 4 will be discarded.
 ### Links
 
 - More complete description of [syslogsidecar](https://github.com/g41797/syslogsidecar#readme)
-- [How to configure the Docker daemon to send the logs to syslog](https://docs.docker.com/config/containers/logging/syslog/)
 
 
 ## Memphis Plugins
@@ -131,7 +129,7 @@ Part of configuration is placed within docker-compose.yml:
           - MEMPHIS_ADDR=memphis:6666
 ```
 
-Connector creates sharable _*nats.Conn*_ for:
+Connector creates shared _*nats.Conn*_ for:
 - periodic validation of connectivity with memphis
 - loggers
 
@@ -164,6 +162,3 @@ syslog messages are produced to memphis as *MsgHeaders* with empty payload:
 ```go
 err := mpr.producer.Produce("", memphis.MsgHeaders(hdrs))
 ```
-
-
-

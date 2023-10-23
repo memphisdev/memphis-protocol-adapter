@@ -82,6 +82,9 @@ func (mpr *msgProducer) Disconnect() {
 }
 
 func (mpr *msgProducer) Produce(msg sputnik.Msg) error {
+
+	defer syslogsidecar.Put(msg)
+
 	if mpr.mc == nil {
 		return fmt.Errorf("connection with broker does not exist")
 	}
@@ -93,14 +96,12 @@ func (mpr *msgProducer) Produce(msg sputnik.Msg) error {
 	hdrs := memphis.Headers{}
 	hdrs.New()
 
-	for k, v := range msg {
-		vstr, ok := v.(string)
-		if !ok {
-			continue
-		}
-		if err := hdrs.Add(k, vstr); err != nil {
-			return err
-		}
+	putToheader := func(name string, value string) error {
+		return hdrs.Add(name, value)
+	}
+
+	if err := syslogsidecar.Unpack(msg, putToheader); err != nil {
+		return err
 	}
 
 	err := mpr.producer.Produce("", memphis.MsgHeaders(hdrs))

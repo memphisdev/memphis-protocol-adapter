@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/g41797/sputnik v0.0.17
-	github.com/g41797/syslogsidecar v0.0.13
+	github.com/g41797/syslogsidecar v0.0.18
 	github.com/memphisdev/memphis.go v1.1.3
 	github.com/nats-io/nats.go v1.30.2
 )
@@ -13,7 +13,7 @@ require (
 	github.com/RackSec/srslog v0.0.0-20180709174129-a4725f04ec91 // indirect
 	github.com/RoaringBitmap/roaring v1.6.0 // indirect
 	github.com/bits-and-blooms/bitset v1.9.0 // indirect
-	github.com/g41797/go-syslog v1.0.5 // indirect
+	github.com/g41797/go-syslog v1.0.6 // indirect
 	github.com/g41797/gonfig v1.0.1 // indirect
 	github.com/g41797/kissngoqueue v0.1.5 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect

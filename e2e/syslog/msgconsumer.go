@@ -98,7 +98,7 @@ func (cons *msgConsumer) prepare() error {
 
 	st, _ = syslog.CreateStation(mc, &cons.conf)
 
-	mconsumer, err := st.CreateConsumer(e2e.SyslogConsumerResponsibility, memphis.PullInterval(50*time.Millisecond), memphis.BatchSize(1000), memphis.BatchMaxWaitTime(time.Second))
+	mconsumer, err := st.CreateConsumer("syslogconsumer", memphis.PullInterval(50*time.Millisecond), memphis.BatchSize(1000), memphis.BatchMaxWaitTime(time.Second))
 	if err != nil {
 		mc.Close()
 		return err
