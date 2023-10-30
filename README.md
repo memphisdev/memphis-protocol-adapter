@@ -2,7 +2,7 @@
 
 [![Go](https://github.com/g41797/memphis-protocol-adapter/actions/workflows/go.yml/badge.svg)](https://github.com/g41797/memphis-protocol-adapter/actions/workflows/go.yml)
 
-  This project is developing in accordance with [#849](https://github.com/memphisdev/memphis/issues/849)
+  *Memphis protocol adapter* is developed in accordance with [#849](https://github.com/memphisdev/memphis/issues/849)
 
   First developed adapter is **syslog-adapter**. 
   
@@ -58,23 +58,22 @@ syslog-adapter consists of:
   - Part name: "data"
       
       
-### Severities
+### Filtering messages by severity level
 
-  Valid severity levels and names are:
- - 0 emerg
- - 1 alert
- - 2 crit
- - 3 err
- - 4 warning
- - 5 notice
- - 6 info
- - 7 debug
+  Valid severity levels are:
+ - 0 (emerg)
+ - 1 (alert)
+ - 2 (crit)
+ - 3 (err)
+ - 4 (warning)
+ - 5 (notice)
+ - 6 (info)
+ - 7 (debug)
 
-  syslogsidecar filters messages by level according to value in configuration, e.g. for:
+  syslog server filters messages by severity level according to value in configuration, e.g. for:
 ```json
 {
   "SEVERITYLEVEL": 4,
-  ...........
 }
 ```
 all messages with severity above 4 will be discarded. 
@@ -156,7 +155,23 @@ Part of configuration is placed within docker-compose.yml:
           - MEMPHIS_HOST=memphis
 ```
 
-Producer uses dedicated _*memphis.Conn*_.
+"syslog" station is the default station. The rest used stations are defined according to [advanced producer configuration](https://github.com/g41797/syslogsidecar#advanced-configuration-and-helper-functions-for-producer) in [syslogconf.json](https://github.com/g41797/memphis-protocol-adapter/blob/master/cmd/syslog-adapter/conf/syslogconf.json) file:
+```json
+[
+    {
+        "Selector": "data",
+        "Target": "syslog-wrongmessages"
+    },
+    {
+        "Selector": "emerg,alert,crit,err",
+        "Target": "syslog-failures"
+    },
+    {
+        "Selector": "local0,local1,local2,local3,local4,local5,local6,local7",
+        "Target": "syslog-applcations"
+    }
+]
+```
 
 syslog messages are produced to memphis as *MsgHeaders* with empty payload:
 ```go
