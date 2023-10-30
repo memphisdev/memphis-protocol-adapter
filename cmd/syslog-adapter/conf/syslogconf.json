@@ -1,0 +1,14 @@
+[
+    {
+        "Selector": "data",
+        "Target": "syslog-wrongmessages"
+    },
+    {
+        "Selector": "emerg,alert,crit,err",
+        "Target": "syslog-failures"
+    },
+    {
+        "Selector": "local0,local1,local2,local3,local4,local5,local6,local7",
+        "Target": "syslog-applcations"
+    }
+]

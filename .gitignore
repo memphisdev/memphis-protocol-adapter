@@ -29,9 +29,4 @@ go.work
 # vscode debug processes
 **/__debug_bin*
 
-# 'exe' files
-**/protocol-adapter
-**/syslog-adapter
-**/syslog-e2e
-
 

@@ -31,9 +31,12 @@ func newMsgProducer() sidecar.MessageProducer {
 }
 
 type msgProducer struct {
-	conf     MsgPrdConfig
-	mc       *memphis.Conn
-	producer *memphis.Producer
+	conf          MsgPrdConfig
+	rt            memphis.RetentionType
+	rv            int
+	mc            *memphis.Conn
+	pr4stat       map[string]*memphis.Producer
+	usesyslogconf bool
 }
 
 func (mpr *msgProducer) Connect(cf sputnik.ConfFactory, _ sputnik.ServerConnection) error {
@@ -49,20 +52,43 @@ func (mpr *msgProducer) Connect(cf sputnik.ConfFactory, _ sputnik.ServerConnecti
 		return err
 	}
 
-	_, err = CreateStation(mpr.mc, &mpr.conf)
-	if err != nil {
-		mpr.Disconnect()
-		return err
-	}
+	mpr.rt, mpr.rv = retentionParams(&mpr.conf)
 
-	p, err := mpr.mc.CreateProducer(mpr.conf.STATION, mpr.conf.PRODUCER)
+	mpr.pr4stat = make(map[string]*memphis.Producer)
+
+	err = mpr.CreateProducerAndStation(mpr.conf.STATION)
 
 	if err != nil {
 		mpr.Disconnect()
 		return err
 	}
 
-	mpr.producer = p
+	if _, err = syslogsidecar.AllTargets(); err == nil {
+		mpr.usesyslogconf = true
+	}
+
+	return nil
+}
+
+func (mpr *msgProducer) CreateProducerAndStation(station string) error {
+
+	if _, exists := mpr.pr4stat[station]; exists {
+		return nil
+	}
+
+	st, err := mpr.mc.CreateStation(station, memphis.RetentionTypeOpt(mpr.rt), memphis.RetentionVal(mpr.rv))
+
+	if err != nil {
+		return err
+	}
+
+	p, err := st.CreateProducer(mpr.conf.PRODUCER)
+	if err != nil {
+		return err
+	}
+
+	mpr.pr4stat[station] = p
+
 	return nil
 }
 
@@ -71,9 +97,10 @@ func (mpr *msgProducer) Disconnect() {
 		return
 	}
 
-	if mpr.producer != nil {
-		mpr.producer.Destroy()
-		mpr.producer = nil
+	for _, producer := range mpr.pr4stat {
+		if producer != nil {
+			producer.Destroy()
+		}
 	}
 
 	mpr.mc.Close()
@@ -104,9 +131,26 @@ func (mpr *msgProducer) Produce(msg sputnik.Msg) error {
 		return err
 	}
 
-	err := mpr.producer.Produce("", memphis.MsgHeaders(hdrs))
+	if !mpr.usesyslogconf {
+		return mpr.pr4stat[mpr.conf.STATION].Produce("", memphis.MsgHeaders(hdrs))
+	}
 
-	return err
+	stations, _ := syslogsidecar.Targets(msg)
+
+	if len(stations) == 0 {
+		return mpr.pr4stat[mpr.conf.STATION].Produce("", memphis.MsgHeaders(hdrs))
+	}
+
+	for _, station := range stations {
+		if err := mpr.CreateProducerAndStation(station); err != nil {
+			return err
+		}
+		if err := mpr.pr4stat[station].Produce("", memphis.MsgHeaders(hdrs)); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func CreateStation(mc *memphis.Conn, conf *MsgPrdConfig) (*memphis.Station, error) {
