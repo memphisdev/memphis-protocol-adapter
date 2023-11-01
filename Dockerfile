@@ -5,7 +5,7 @@ FROM --platform=linux/amd64 golang:1.19-alpine3.17 as build
 WORKDIR $GOPATH/src/app
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o syslog-adapter -ldflags="-w" -a -v  ./cmd/syslog-adapter
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags "linux" -o syslog-adapter -ldflags="-w" -a -v  ./cmd/syslog-adapter
 
 
 FROM alpine:3.17
