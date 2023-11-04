@@ -8,8 +8,8 @@ github.com/bits-and-blooms/bitset v1.10.0/go.mod h1:7hO7Gc7Pp1vODcmWvKMRA9BNmbv6
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/g41797/go-syslog v1.0.10 h1:xyj9Gs/tts2aRlObtnXWGSx6UXU4GKm31NJZrpWCgl0=
-github.com/g41797/go-syslog v1.0.10/go.mod h1:0XG2Y7r0zB3KLbJG/aJsrYaO1mSs1CfGWD1dQ1J8M64=
+github.com/g41797/go-syslog v1.0.11 h1:HpS1pkLg6Yxt12+N1nySFHj7QSZA+gihYajuCoLxG/0=
+github.com/g41797/go-syslog v1.0.11/go.mod h1:UML8pQR/cz2IUPcKPrfJ98kViyXxbx1OCj6MVqeJR+E=
 github.com/g41797/gonfig v1.0.2 h1:S4gMv7AF1+lKkHNBU91kG4DJZSmP0+5INc+6AgEuR64=
 github.com/g41797/gonfig v1.0.2/go.mod h1:5iL4oHFpYi+c7AE4D1dZnlBleJzM71dX6HZBhEELF90=
 github.com/g41797/kissngoqueue v0.1.5 h1:UrnpxbjOnTnKj/EqpbLA9LjhYkHjnLWMZQqsz3AOBG8=
@@ -18,8 +18,8 @@ github.com/g41797/reuseport v0.4.5 h1:/cRUOykZ99RWdP2TRsoWtOqZVeR3BtEjD4ZQ6ucCpJ
 github.com/g41797/reuseport v0.4.5/go.mod h1:YspHTQtcQs/c6t4geFSzo0TN13ZtUY6HOYPMKynuvpU=
 github.com/g41797/sputnik v0.0.17 h1:HBDFPgpMBaZHD1YY5Vjtfy6IVVigq31lN6WmK3KmG48=
 github.com/g41797/sputnik v0.0.17/go.mod h1:nhuXjBz9tK1Myi+LVaTpLodWdMuquayrdcgJO6O+5dA=
-github.com/g41797/syslogsidecar v0.0.24 h1:6UjMfOBXaC569tK+iYdvyyRxfvJSdVPBvIgVBgkSSrE=
-github.com/g41797/syslogsidecar v0.0.24/go.mod h1:E3k3IM/doOQjSDBhXp/gWJGJ2OOSV+0BivTl9zEmTB0=
+github.com/g41797/syslogsidecar v0.0.25 h1:LZdu1ia7L6uR/ZlltqJFeqAZ1rMsO981mejo35Lel+g=
+github.com/g41797/syslogsidecar v0.0.25/go.mod h1:M3gsLVADtlsAwDH3UtSuj8sqJoTWS2idbcESg4EiVVs=
 github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
