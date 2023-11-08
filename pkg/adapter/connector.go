@@ -9,10 +9,16 @@ import (
 	"log"
 	"os"
 	"sync/atomic"
-	"time"
 
 	"github.com/g41797/sputnik"
+	"github.com/memphisdev/memphis-rest-gateway/conf"
+	lgr "github.com/memphisdev/memphis-rest-gateway/logger"
+	mconnector "github.com/memphisdev/memphis-rest-gateway/memphisSingleton"
 	"github.com/nats-io/nats.go"
+)
+
+const (
+	labelLen = 3
 )
 
 const (
@@ -23,21 +29,6 @@ const (
 	syslogsErrSubject  = "extern.err"
 )
 
-type BrokerConnConfig struct {
-	MEMPHIS_ADDR         string
-	MEMPHIS_CLIENT       string
-	ROOT_USER            string
-	ROOT_PASSWORD        string
-	CONNECTION_TOKEN     string
-	CLIENT_CERT_PATH     string
-	CLIENT_KEY_PATH      string
-	ROOT_CA_PATH         string
-	USER_PASS_BASED_AUTH bool
-	DEBUG                bool
-	CLOUD_ENV            bool
-	DEV_ENV              bool
-}
-
 var _ sputnik.ServerConnector = &BrokerConnector{}
 var _ io.Writer = &BrokerConnector{}
 var _ LoggerFactory = new(BrokerConnector).getLogger
@@ -46,15 +37,14 @@ const connectorConfName = "connector"
 
 type BrokerConnector struct {
 	io.Writer
-	conf       BrokerConnConfig
+	conf       conf.Configuration
 	nc         *nats.Conn
-	l          atomic.Pointer[Logger]
+	l          atomic.Pointer[lgr.Logger]
 	flags      int
 	pidPrefix  string
 	labelStart int
 	baseSubj   string
 	lblToSubj  map[string]string
-	tlsConfig  *tls.Config
 }
 
 func (c *BrokerConnector) Connect(cf sputnik.ConfFactory) (conn sputnik.ServerConnection, err error) {
@@ -62,7 +52,7 @@ func (c *BrokerConnector) Connect(cf sputnik.ConfFactory) (conn sputnik.ServerCo
 		return c.getLogger, nil
 	}
 
-	var conf BrokerConnConfig
+	var conf conf.Configuration
 
 	if err = cf(connectorConfName, &conf); err != nil {
 		return nil, err
@@ -71,78 +61,21 @@ func (c *BrokerConnector) Connect(cf sputnik.ConfFactory) (conn sputnik.ServerCo
 	return c.ConnectWithConfig(conf)
 }
 
-func (c *BrokerConnector) ConnectWithConfig(conf BrokerConnConfig) (conn sputnik.ServerConnection, err error) {
+func (c *BrokerConnector) ConnectWithConfig(conf conf.Configuration) (conn sputnik.ServerConnection, err error) {
 
 	c.conf = conf
 
-	if err = c.prepareTLS(); err != nil {
-		return nil, err
-	}
+	nc, err := mconnector.Connect(conf)
 
-	if err = c.connect(); err != nil {
-		return nil, err
-	}
-
-	c.createLogger()
-
-	return c.getLogger, nil
-}
-
-// For first implementation advanced callbacks of nats.Conn
-// (connected/disconnected/reconnected) are not used
-// Implementation from rest-gateway
-func (c *BrokerConnector) connect() error {
-	var nc *nats.Conn
-	var err error
-
-	natsOpts := nats.Options{
-		Url:            c.conf.MEMPHIS_ADDR,
-		AllowReconnect: true,
-		MaxReconnect:   10,
-		ReconnectWait:  3 * time.Second,
-		Name:           c.conf.MEMPHIS_CLIENT,
-	}
-
-	creds := c.conf.CONNECTION_TOKEN
-	username := c.conf.ROOT_USER
-	if c.conf.USER_PASS_BASED_AUTH {
-		username = "$$memphis"
-		natsOpts.User = username
-		creds = c.conf.CONNECTION_TOKEN + "_" + c.conf.ROOT_PASSWORD
-		natsOpts.Password = creds
-	} else {
-		natsOpts.Token = username + "::" + creds
-	}
-
-	if c.tlsConfig != nil {
-		natsOpts.TLSConfig = c.tlsConfig
-	}
-
-	nc, err = natsOpts.Connect()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	c.nc = nc
 
-	return nil
-}
+	c.createLogger()
 
-func (c *BrokerConnector) prepareTLS() error {
-
-	if c.tlsConfig != nil {
-		return nil
-	}
-
-	t, err := PrepareTLS(c.conf.CLIENT_CERT_PATH, c.conf.CLIENT_KEY_PATH, c.conf.ROOT_CA_PATH)
-
-	if err != nil {
-		return err
-	}
-
-	c.tlsConfig = t
-
-	return nil
+	return c.getLogger, nil
 }
 
 func (c *BrokerConnector) IsConnected() bool {
@@ -174,7 +107,7 @@ func (c *BrokerConnector) Disconnect() {
 	return
 }
 
-func (c *BrokerConnector) getLogger() *Logger {
+func (c *BrokerConnector) getLogger() *lgr.Logger {
 	if c == nil {
 		return nil
 	}
@@ -193,7 +126,7 @@ func (c *BrokerConnector) createLogger() {
 		"ERR": syslogsErrSubject,
 	}
 
-	c.l.Store(NewLogger(log.New(c, c.pidPrefix, c.flags)))
+	c.l.Store(lgr.NewLogger(log.New(c, c.pidPrefix, c.flags)))
 
 	return
 }

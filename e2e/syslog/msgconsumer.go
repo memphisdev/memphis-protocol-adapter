@@ -7,9 +7,10 @@ import (
 	"github.com/g41797/sputnik"
 	"github.com/g41797/sputnik/sidecar"
 	"github.com/g41797/syslogsidecar/e2e"
-	"github.com/memphisdev/memphis-protocol-adapter/pkg/adapter"
 	"github.com/memphisdev/memphis-protocol-adapter/pkg/syslog"
 	"github.com/memphisdev/memphis.go"
+
+	lgr "github.com/memphisdev/memphis-rest-gateway/logger"
 )
 
 func init() {
@@ -41,7 +42,7 @@ func (mcn *msgConsumer) Connect(cf sputnik.ConfFactory, shared sputnik.ServerCon
 		return err
 	}
 
-	lgrf, ok := shared.(func() *adapter.Logger)
+	lgrf, ok := shared.(func() *lgr.Logger)
 	if ok {
 		lgrf().Noticef("Syslog consumer started")
 	}
