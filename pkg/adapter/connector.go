@@ -31,7 +31,6 @@ const (
 
 var _ sputnik.ServerConnector = &BrokerConnector{}
 var _ io.Writer = &BrokerConnector{}
-var _ LoggerFactory = new(BrokerConnector).getLogger
 
 const connectorConfName = "connector"
 
@@ -49,7 +48,7 @@ type BrokerConnector struct {
 
 func (c *BrokerConnector) Connect(cf sputnik.ConfFactory) (conn sputnik.ServerConnection, err error) {
 	if c.IsConnected() {
-		return c.getLogger, nil
+		return c.getInfo, nil
 	}
 
 	var conf conf.Configuration
@@ -75,7 +74,7 @@ func (c *BrokerConnector) ConnectWithConfig(conf conf.Configuration) (conn sputn
 
 	c.createLogger()
 
-	return c.getLogger, nil
+	return c.getInfo, nil
 }
 
 func (c *BrokerConnector) IsConnected() bool {
@@ -107,11 +106,11 @@ func (c *BrokerConnector) Disconnect() {
 	return
 }
 
-func (c *BrokerConnector) getLogger() *lgr.Logger {
+func (c *BrokerConnector) getInfo() (*lgr.Logger, *nats.Conn) {
 	if c == nil {
-		return nil
+		return nil, nil
 	}
-	return c.l.Load()
+	return c.l.Load(), c.nc
 }
 
 func (c *BrokerConnector) createLogger() {
