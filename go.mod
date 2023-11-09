@@ -40,7 +40,6 @@ require (
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.50.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
@@ -50,4 +49,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/memphisdev/memphis-rest-gateway => ../memphis-rest-gateway
+replace github.com/memphisdev/memphis-rest-gateway => ../../g41797/memphis-rest-gateway
