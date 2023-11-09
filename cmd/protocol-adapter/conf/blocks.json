@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "syslogreceiver",
+    "Responsibility": "syslogreceiver"
+  },
+  {
+    "Name": "syslogproducer",
+    "Responsibility": "syslogproducer"
+  },
+  {
+    "Name": "restgateway",
+    "Responsibility": "restgateway"
+  }
+]
