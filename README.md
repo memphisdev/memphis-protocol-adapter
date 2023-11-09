@@ -2,10 +2,11 @@
 
 [![Go](https://github.com/g41797/memphis-protocol-adapter/actions/workflows/go.yml/badge.svg)](https://github.com/g41797/memphis-protocol-adapter/actions/workflows/go.yml)
 
-  *Memphis protocol adapter* is developed in accordance with [#849](https://github.com/memphisdev/memphis/issues/849)
+  *Memphis protocol adapter* is developed in accordance with [#849](https://github.com/memphisdev/memphis/issues/849). It consists of 2 adapters:
+  - **syslog-adapter**
+  - **rest-gateway**
 
-  First developed adapter is **syslog-adapter**. 
-  
+# SYSLOG ADAPTER
 
 syslog-adapter is based on 
 - [syslogsidecar](https://github.com/g41797/syslogsidecar#readme)
@@ -177,3 +178,10 @@ syslog messages are produced to memphis as *MsgHeaders* with empty payload:
 ```go
 err := mpr.producer.Produce("", memphis.MsgHeaders(hdrs))
 ```
+
+
+# REST GATEWAY
+
+ Description of rest gateway see [memphis-rest-gateway](https://github.com/memphisdev/memphis-rest-gateway)
+
+ 
