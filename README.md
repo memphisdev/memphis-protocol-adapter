@@ -80,7 +80,7 @@ syslog-adapter consists of:
 all messages with severity above 4 will be discarded. 
 
 
-  ### Configuration
+  ### syslog server configuration
 
   Configuration of syslog server part of syslogsidecar is saved in the file syslogreceiver.json:
 ```json
@@ -95,11 +95,6 @@ all messages with severity above 4 will be discarded.
     "ROOT_CA_PATH": ""
 }
 ```
-
-### Links
-
-- More complete description of [syslogsidecar](https://github.com/g41797/syslogsidecar#readme)
-
 
 ## Memphis Plugins
 
@@ -184,4 +179,10 @@ err := mpr.producer.Produce("", memphis.MsgHeaders(hdrs))
 
  Description of rest gateway see [memphis-rest-gateway](https://github.com/memphisdev/memphis-rest-gateway)
 
+
+# Configuration of the protocol-adapter process
  
+- [Configuration folder](https://github.com/g41797/syslogsidecar#configuration)
+- [Syslog advanced configuration](https://github.com/g41797/syslogsidecar#advanced-configuration-and-helper-functions-for-producer)
+
+
