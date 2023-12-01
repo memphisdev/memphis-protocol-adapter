@@ -1,0 +1,5 @@
+{
+    "BROKER_HOST": "127.0.0.1",
+    "BROKER_USER": "root",
+    "BROKER_PSWRD": "memphis"
+}

@@ -10,5 +10,9 @@
   {
     "Name": "restgateway",
     "Responsibility": "restgateway"
+  },
+  {
+    "Name": "grpcadapter",
+    "Responsibility": "grpcadapter"
   }
 ]

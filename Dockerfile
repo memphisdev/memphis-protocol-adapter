@@ -13,10 +13,11 @@ ENV GOPATH="/go/src"
 WORKDIR /run
 
 COPY --from=build $GOPATH/app/protocol-adapter .
-COPY --from=build $GOPATH/app/cmd/protocol-adapter/conf/* conf/
+
 EXPOSE 5141/tcp
 EXPOSE 5141/udp
 EXPOSE 5143/tcp
 EXPOSE 4444/tcp
+EXPOSE 56789/tcp
 
-ENTRYPOINT ["/run/protocol-adapter", "--cf", "./conf"]
+ENTRYPOINT ["/run/protocol-adapter"]
