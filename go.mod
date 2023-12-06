@@ -3,7 +3,7 @@ module github.com/memphisdev/memphis-protocol-adapter
 go 1.19
 
 require (
-	github.com/g41797/memphisgrpc v0.0.3
+	github.com/g41797/memphisgrpc v0.0.4
 	github.com/g41797/sputnik v0.0.21
 	github.com/g41797/syslogsidecar v0.0.25
 	github.com/memphisdev/memphis.go v1.1.4
@@ -11,6 +11,7 @@ require (
 )
 
 require github.com/memphisdev/memphis-rest-gateway v0.0.0-00010101000000-000000000000
+
 replace github.com/memphisdev/memphis-rest-gateway => ../../g41797/memphis-rest-gateway
 
 require (
