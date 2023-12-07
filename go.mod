@@ -3,7 +3,7 @@ module github.com/memphisdev/memphis-protocol-adapter
 go 1.19
 
 require (
-	github.com/g41797/memphisgrpc v0.0.4
+	github.com/g41797/memphisgrpc v0.0.5
 	github.com/g41797/sputnik v0.0.21
 	github.com/g41797/syslogsidecar v0.0.25
 	github.com/memphisdev/memphis.go v1.1.4
