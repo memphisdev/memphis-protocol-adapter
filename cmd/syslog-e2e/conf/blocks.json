@@ -1,0 +1,18 @@
+[
+  {
+    "Name": "syslogclient",
+    "Responsibility": "syslogclient"
+  },
+  {
+    "Name": "syslogconsumer",
+    "Responsibility": "syslogconsumer"
+  },
+  {
+    "Name": "syslogreceiver",
+    "Responsibility": "syslogreceiver"
+  },
+  {
+    "Name": "syslogproducer",
+    "Responsibility": "syslogproducer"
+  }
+]
